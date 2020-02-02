@@ -1,10 +1,4 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS portfolios;
-DROP TABLE IF EXISTS transactions;
-DROP TABLE IF EXISTS stocks;
-DROP TABLE IF EXISTS stock_history;
-
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
@@ -19,7 +13,7 @@ CREATE TABLE users (
     is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );
 
-CREATE TABLE portfolios (
+CREATE TABLE IF NOT EXISTS portfolios (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     display_name TEXT,
@@ -27,7 +21,7 @@ CREATE TABLE portfolios (
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-CREATE TABLE transactions (
+CREATE TABLE IF NOT EXISTS transactions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     portfolio_id INTEGER NOT NULL,
     stock_id INTEGER NOT NULL,
@@ -41,13 +35,13 @@ CREATE TABLE transactions (
     FOREIGN KEY (stock_id) REFERENCES stocks (id)
 );
 
-CREATE TABLE stocks (
+CREATE TABLE IF NOT EXISTS stocks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     symbol TEXT NOT NULL,
     company_name TEXT NOT NULL
 );
 
-CREATE TABLE stock_history (
+CREATE TABLE IF NOT EXISTS stock_history (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     stock_id INTEGER NOT NULL,
     dt DATETIME NOT NULL,
