@@ -1,0 +1,22 @@
+<header>
+    <nav>
+
+        <ul>
+
+            <li><a href="{{ url_for('index') }}">Capstone Project</a></li>
+
+            {% if g.user %}
+
+                <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+
+            {% else %}
+
+                <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+
+            {% endif %}
+    
+        </ul>
+
+    </nav>
+</header>

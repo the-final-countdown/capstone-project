@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<title>{% block title %}{% endblock %} | Capstone Project </title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+
+<div class="container">
+
+    {% include 'components/header.html' %}
+
+    {% block content %}{% endblock %}
+
+    {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+    {% endfor %}
+
+    {% include 'components/footer.html' %}
+
+    {% block scripts %}{% endblock %}
+</div>
