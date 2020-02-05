@@ -1,11 +1,12 @@
 import os
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
-from models import User
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
+
+from models import User
 
 
 @app.route('/')
@@ -17,12 +18,10 @@ def hello_world():
 def add_user():
     email = request.args.get('email')
     password = request.args.get('password')
-    timestamp = request.args.get('timestamp')
     try:
         user = User(
             email=email,
-            password=password,
-            timestamp=timestamp
+            password=password
         )
         db.session.add(user)
         db.session.commit()

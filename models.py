@@ -1,4 +1,5 @@
 from app import db
+import datetime
 
 
 class User(db.Model):
@@ -14,4 +15,4 @@ class User(db.Model):
     state = db.Column(db.Text)
     zip_code = db.Column(db.Text)
     telephone = db.Column(db.Text)
-    created_on = db.Column(db.TIMESTAMP, nullable=False)
+    created_on = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.utcnow)
