@@ -16,3 +16,11 @@ class User(db.Model):
     zip_code = db.Column(db.Text)
     telephone = db.Column(db.Text)
     created_on = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.utcnow)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'password': self.password,
+            'created_on': self.created_on
+        }

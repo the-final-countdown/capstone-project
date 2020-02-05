@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -28,6 +28,12 @@ def add_user():
         return "Book added. user id={}".format(user.id)
     except Exception as e:
         return str(e)
+
+
+@app.route("/users")
+def view_users():
+    users = User.query.all()
+    return jsonify([e.serialize() for e in users])
 
 
 if __name__ == '__main__':
