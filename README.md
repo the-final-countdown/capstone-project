@@ -14,8 +14,6 @@ An application that allows users to view their stock portfolios
 
 3. Setup your development branch
     > (master)> git checkout \<your branch name\>
-    >
-    > (dev-branch)> git pull master 
 
 4. Install dependencies
     > (dev-branch)> pip install .
