@@ -17,6 +17,9 @@ An application that allows users to view their stock portfolios
 
 4. Install dependencies
     > (dev-branch)> pip install .
+    
+    >OR run pip3 install pipenv -> pipenv install -> pipenv shell (This will create a virtual environment 
+    using pipenv and will install the required packages based on the pipfile)
 
 5. Start app *(for Windows. For Mac and Linus, use **export** instead of **set**)*:
     > (dev-branch)> set FLASK_ENV=development
