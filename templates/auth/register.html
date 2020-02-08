@@ -4,6 +4,14 @@
     <h1>{% block title %}Register{% endblock %}</h1>
     <form method="post">
         <fieldset>
+            <label for="first-name">First Name</label>
+            <input name="first-name" id="first-name" required>
+        </fieldset>
+        <fieldset>
+            <label for="last-name">Last Name</label>
+            <input name="last-name" id="last-name" required>
+        </fieldset>
+        <fieldset>
             <label for="email">Email</label>
             <input name="email" id="email" required>
         </fieldset>

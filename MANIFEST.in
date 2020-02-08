@@ -1,4 +1,3 @@
-include capstone-project/schema.sql
-graft capstone-project/static
-graft capstone-project/templates
+graft static
+graft templates
 global-exclude *.pyc

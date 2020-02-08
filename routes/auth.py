@@ -2,7 +2,7 @@ import functools
 
 from flask import Blueprint, request, render_template, session, redirect, url_for, flash
 
-from db import get_db, get_user_by_email
+from database import queries
 
 bp = Blueprint('auth', __name__)
 
@@ -10,27 +10,14 @@ bp = Blueprint('auth', __name__)
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-
-        error = None
-
-        if not email:
-            error = 'Username required'
-        elif not password:
-            error = 'Password required'
-        elif get_user_by_email(email) is not None:
-            error = 'User is already registered'
+        error = queries.create_user(
+            first_name=request.form['first-name'],
+            last_name=request.form['last-name'],
+            email=request.form['email'],
+            password=request.form['password'],
+        )
 
         if error is None:
-            db = get_db()
-
-            db.execute(
-                'INSERT INTO users (email, password) VALUES (? , ?)',
-                (email, password,)
-            )
-            db.commit()
-
             return redirect(url_for('auth.login'))
         else:
             flash(error)
@@ -40,26 +27,26 @@ def register():
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-
-        user = get_user_by_email(email)
-
-        error = None
-
-        if user is None:
-            error = 'Incorrect email'
-        elif not user['password'] == password:
-            error = 'Incorrect password'
-
-        if error is None:
-            session.clear()
-            session['user_id'] = user['id']
-
-            return redirect(url_for('index'))
-        else:
-            flash(error)
+    # if request.method == 'POST':
+    #     email = request.form['email']
+    #     password = request.form['password']
+    #
+    #     user = get_user_by_email(email)
+    #
+    #     error = None
+    #
+    #     if user is None:
+    #         error = 'Incorrect email'
+    #     elif not user['password'] == password:
+    #         error = 'Incorrect password'
+    #
+    #     if error is None:
+    #         session.clear()
+    #         session['user_id'] = user['id']
+    #
+    #         return redirect(url_for('index'))
+    #     else:
+    #         flash(error)
 
     return render_template('auth/login.html')
 

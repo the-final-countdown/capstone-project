@@ -2,38 +2,44 @@ import os
 
 from flask import Flask
 
-import db
+from database import db
 
 # route blueprints
-from routes import portfolio
+from routes import index
 from routes import auth
 from routes import admin
 
 
-# create and configure the app
-app = Flask(__name__, instance_relative_config=True)
-app.config.from_mapping(
-    SECRET_KEY = 'dev',
-    DATABASE = os.path.join(app.instance_path, 'capstone-project.sqlite')
-)
+def create_app(test_config=None):
 
-# create the instance folder, if necessary
-try:
-    os.makedirs(app.instance_path)
-except OSError:
-    pass
+    # create the app and load config variables
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        SECRET_KEY=os.environ.get('SECRET_KEY') or 'dev',
+        SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL') or 'sqlite:///capstone-project.sqlite',
+        SQLALCHEMY_TRACK_MODIFICATIONS=False
+    )
 
-# initialize the db
-db.init_app(app)
+    if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.from_mapping(test_config)
 
-# ~~~~~~ ROUTES ~~~~~~~
+    # initialize the db
+    db.init_app(app)
 
-# main page
-app.register_blueprint(portfolio.bp)
-app.add_url_rule('/', endpoint='index')
+    # ROUTES
 
-# login and registration
-app.register_blueprint(auth.bp)
+    # main page
+    app.register_blueprint(index.bp)
+    app.add_url_rule('/', endpoint='index')
 
-# admin
-app.register_blueprint(admin.bp)
+    # login and registration
+    app.register_blueprint(auth.bp)
+
+    # admin
+    app.register_blueprint(admin.bp)
+
+    return app
