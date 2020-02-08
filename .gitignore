@@ -20,5 +20,6 @@ venv.bak/
 # Flask
 .webassets-cache
 
-# PyCharm
+# IDEs
 .idea/
+.vs/
