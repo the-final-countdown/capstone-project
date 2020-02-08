@@ -12,10 +12,10 @@ An application that allows users to view their stock portfolios
 2. Change working directory
     > \> cd capstone-project
 
-3. Merge/pull changes to your branch
+3. Setup your development branch
     > (master)> git checkout \<your branch name\>
     >
-    > (dev-branch)> git 
+    > (dev-branch)> git pull master 
 
 4. Install dependencies
     > (dev-branch)> pip install .
@@ -43,7 +43,7 @@ An application that allows users to view their stock portfolios
 
 7. Under the **Resources** tab, search and install **Heroku Postgres**
 
-8. Choose your branch and deploy use one of the deployment methods
+8. Choose your branch and use one of the deployment methods to build your app
 
 ## Endpoints
 
