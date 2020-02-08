@@ -1,62 +1,72 @@
 # CSC289 Capstone Project
 
-An application that allows customers to view their stock portfolios
+An application that allows users to view their stock portfolios
 
 ## Development Setup
 
 ### Local Development
 
-Clone the repository
+1. Clone the repository
+    > \> git clone https://github.com/the-final-countdown/capstone-project
 
-    > git clone https://github.com/the-final-countdown/capstone-project
+2. Change working directory
+    > \> cd capstone-project
 
-Change working directory
+3. Merge/pull changes to your branch
+    > (master)> git checkout \<your branch name\>
+    >
+    > (dev-branch)> git 
 
-    > cd capstone-project
-    
-Merge/pull changes to your branch
+4. Install dependencies
+    > (dev-branch)> pip install .
 
-    (master)> git checkout <your branch name>
-    (dev-branch)> git 
+5. Start app *(for Windows. For Mac and Linus, use **export** instead of **set**)*:
+    > (dev-branch)> set FLASK_ENV=development
+    >
+    > (dev-branch)> flask run
 
-Install dependencies
-
-    > pip install .
-
-Start app *(for Windows. For Mac and Linus, use **export** instead of **set**)*:
-
-    > set FLASK_ENV=development
-    > flask run
-
-Application will be served on http://127.0.0.1:5000/
+6. Navigate to http://127.0.0.1:5000/
 
 ### Deploying to Heroku
 
-Create a Heroku account if you don't already have one
+1. Create a Heroku account if you don't already have one
 
-On the dashboard, click **New** > **Create new app**
+2. On the dashboard, click **New** > **Create new app**
 
-Choose a name for the app
+3. Choose a name for the app
 
-Under the **Deploy** tab, find **Deployment method** and choose **GitHub**
-*(you may have to login to Github first)*
+4. Under the **Deploy** tab, find **Deployment method** and choose **GitHub**
 
-Select **the-final-countdown** repository
+5. Select **the-final-countdown** repository
 
-Search for **capstone-project** and then click **Connect**
+6. Search for **capstone-project** and then click **Connect**
 
-Choose your branch and deploy use one of the deployment methods.
-**Note**: I believe there is a daily deploy limit so I recommend using the Manual deploy option
+7. Under the **Resources** tab, search and install **Heroku Postgres**
 
-
-
+8. Choose your branch and deploy use one of the deployment methods
 
 ## Endpoints
 
-### /
+### / (Homepage)
+
+**GET** - *While a user is logged in, displays a summary of their portfolios. From a dropdown,
+the user can also select individual portfolios to view individual stock performance within
+that portfolio.
+
+If a user is not logged in, TBD
 
 ### /register
 
+**GET** - *Display a registration form*
+
+**POST** - *Send registration form data to application*
+
 ### /login
 
+**GET** - *Display a login form*
+
+**POST** - *Send login form data to application*
+
 ### /admin
+
+**GET** - *View all user portfolios*
