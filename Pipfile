@@ -1,0 +1,26 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+
+[packages]
+antiorm = "==1.2.1"
+click = "==7.0"
+db = "==0.1.1"
+gunicorn = "==20.0.4"
+itsdangerous = "==1.1.0"
+psycopg2 = "==2.8.4"
+python-dotenv = "==0.10.5"
+six = "==1.14.0"
+Flask = "==1.1.1"
+Flask-SQLAlchemy = "==2.4.1"
+Jinja2 = "==2.11.1"
+MarkupSafe = "==1.1.1"
+SQLAlchemy = "==1.3.13"
+Werkzeug = "==0.16.1"
+
+[requires]
+python_version = "3.8"
