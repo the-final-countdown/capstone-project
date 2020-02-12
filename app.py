@@ -2,7 +2,7 @@ import os
 
 from flask import Flask
 
-from database import db
+import db
 
 # route blueprints
 from routes import index

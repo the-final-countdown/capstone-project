@@ -1,8 +1,9 @@
 import functools
 
-from flask import Blueprint, request, render_template, session, redirect, url_for, flash
+from flask import Blueprint, request, render_template, session, g, redirect, url_for, flash
+from werkzeug.security import check_password_hash
 
-from database import queries
+import db
 
 bp = Blueprint('auth', __name__)
 
@@ -10,12 +11,12 @@ bp = Blueprint('auth', __name__)
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        error = queries.create_user(
-            first_name=request.form['first-name'],
-            last_name=request.form['last-name'],
-            email=request.form['email'],
-            password=request.form['password'],
-        )
+        error = db.create_user({
+            'first-name': request.form.get('first-name'),
+            'last-name': request.form.get('last-name'),
+            'email': request.form.get('email'),
+            'password': request.form.get('password'),
+        })
 
         if error is None:
             return redirect(url_for('auth.login'))
@@ -27,26 +28,28 @@ def register():
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
-    # if request.method == 'POST':
-    #     email = request.form['email']
-    #     password = request.form['password']
-    #
-    #     user = get_user_by_email(email)
-    #
-    #     error = None
-    #
-    #     if user is None:
-    #         error = 'Incorrect email'
-    #     elif not user['password'] == password:
-    #         error = 'Incorrect password'
-    #
-    #     if error is None:
-    #         session.clear()
-    #         session['user_id'] = user['id']
-    #
-    #         return redirect(url_for('index'))
-    #     else:
-    #         flash(error)
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        user = db.get_user_by_email(email)
+
+        error = None
+
+        if user is None:
+            error = 'Incorrect email'
+        elif not check_password_hash(user.password, password):
+            error = 'Incorrect password'
+
+        # redirect if credentials are correct
+        if error is None:
+            session.clear()
+            session['user_id'] = user.id
+
+            return redirect(url_for('index'))
+
+        # flash error on incorrect credentials
+        flash(error)
 
     return render_template('auth/login.html')
 
@@ -55,6 +58,16 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = db.get_user_by_id(user_id)
 
 
 def login_required(view):

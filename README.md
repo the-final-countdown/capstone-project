@@ -12,21 +12,40 @@ An application that allows users to view their stock portfolios
 2. Change working directory
     > \> cd capstone-project
 
-3. Setup your development branch
+3. Create or update your development branch
+    > To create a new branch:
+    >
+    > (master)> git checkout -b \<your branch name\>
+    >
+    > To update your existing branch:
+    >
     > (master)> git checkout \<your branch name\>
-
+    >
+    > (dev-branch)> git merge master
+    
 4. Install dependencies
     > (dev-branch)> pip install .
     
-    >OR run pip3 install pipenv -> pipenv install -> pipenv shell (This will create a virtual environment 
+    > OR run pip3 install pipenv -> pipenv install -> pipenv shell (This will create a virtual environment 
     using pipenv and will install the required packages based on the pipfile)
 
-5. Start app *(for Windows. For Mac and Linus, use **export** instead of **set**)*:
+5. Start app *(for Windows. For Mac and Linux, use **export** instead of **set**)*:
     > (dev-branch)> set FLASK_ENV=development
     >
     > (dev-branch)> flask run
 
-6. Navigate to http://127.0.0.1:5000/
+6. The database will be created the first time you start the app. To populate it with users,
+Ctrl-C out of the application.  Then create a free account at https://mockaroo.com/ and setup
+an API endpoint at */users.json* that serves this data: https://mockaroo.com/71771080 (you can
+test the endpoint by navigating to it within your browser). After you get it setup, navigate
+back to the command line and type the command below (This makes a request to your newly created
+endpoint and may take 30 seconds or so).
+    > flask populate-db
+
+7. Start the app again with
+    > flask run
+
+8. Navigate to your application at http://127.0.0.1:5000/
 
 ### Deploying to Heroku
 
@@ -52,9 +71,9 @@ An application that allows users to view their stock portfolios
 
 **GET** - *While a user is logged in, displays a summary of their portfolios. From a dropdown,
 the user can also select individual portfolios to view individual stock performance within
-that portfolio.
+that portfolio.*
 
-If a user is not logged in, TBD
+*If a user is not logged in, TBD*
 
 ### /register
 
