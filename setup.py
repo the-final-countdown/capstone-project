@@ -7,7 +7,12 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
+        'click',
         'flask',
-        'flask-sqlalchemy'
+        'flask-sqlalchemy',
+        'gunicorn',
+        'python-dotenv',
+        'requests',
+        'Werkzeug',
     ],
 )
