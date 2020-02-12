@@ -7,63 +7,89 @@ An application that allows users to view their stock portfolios
 ### Local Development
 
 1. Clone the repository
-    > \> git clone https://github.com/the-final-countdown/capstone-project
+
+        > git clone https://github.com/the-final-countdown/capstone-project
 
 2. Change working directory
-    > \> cd capstone-project
+    
+        > cd capstone-project
 
 3. Create or update your development branch
-    > To create a new branch:
-    >
-    > (master)> git checkout -b \<your branch name\>
-    >
-    > To update your existing branch:
-    >
-    > (master)> git checkout \<your branch name\>
-    >
-    > (dev-branch)> git merge master
+    
+    Create a new branch:
+    
+        (master)> git checkout -b <your branch name\>
+    
+    Update your existing branch:
+    
+        (master)> git checkout <your branch name\>
+        (dev-branch)> git merge master
     
 4. Install dependencies
-    > (dev-branch)> pip install .
+        
+        (dev-branch)> pip install .
     
-    > OR run pip3 install pipenv -> pipenv install -> pipenv shell (This will create a virtual environment 
-    using pipenv and will install the required packages based on the pipfile)
+    OR
+        
+        run pip3 install pipenv -> pipenv install -> pipenv shell (This will create a virtual environment 
+        using pipenv and will install the required packages based on the pipfile)
 
-5. Start app *(for Windows. For Mac and Linux, use **export** instead of **set**)*:
-    > (dev-branch)> set FLASK_ENV=development
-    >
-    > (dev-branch)> flask run
+5. Create the databse by starting the app *(for Windows. For Mac and Linux, use **export** instead of **set**)*:
 
-6. The database will be created the first time you start the app. To populate it with users,
-Ctrl-C out of the application.  Then create a free account at https://mockaroo.com/ and setup
-an API endpoint at */users.json* that serves this data: https://mockaroo.com/71771080 (you can
-test the endpoint by navigating to it within your browser). After you get it setup, navigate
-back to the command line and type the command below (This makes a request to your newly created
-endpoint and may take 30 seconds or so).
-    > flask populate-db
+        (dev-branch)> set FLASK_ENV=development
+        (dev-branch)> flask run
+
+6. Ctrl-C out of the application so we can populate the database with users
+    
+    1. Create a free account on https://mockaroo.com/
+    
+    2. Within Mockaroo, setup an API endpoint at */users.json* that serves the data we need.
+    Duplicate or import the data from here--https://mockaroo.com/71771080. The format is consistent with the form data
+    we'll be getting so we can use the same function to insert the users into the database as we do to register users)
+    
+    3. Back in your *capstone-project* directory, create a **.env** file and add the line below (if you don't have it
+    yet, *pip install python-dotenv* so this will work)
+        
+        > API_KEY_MOCKAROO=*<your Mockaroo api key\>*
+
+    4. Navigate back to the command line and type the command below (This may take 30 seconds or so while
+    it makes a request to your newly created endpoint).
+
+            flask populate-db
 
 7. Start the app again with
-    > flask run
+
+        flask run
 
 8. Navigate to your application at http://127.0.0.1:5000/
 
 ### Deploying to Heroku
 
-1. Create a Heroku account if you don't already have one
+1. Create a Heroku account
 
 2. On the dashboard, click **New** > **Create new app**
 
 3. Choose a name for the app
 
-4. Under the **Deploy** tab, find **Deployment method** and choose **GitHub**
+4. On the **Deploy** tab, find **Deployment method** and choose **GitHub**
 
 5. Select **the-final-countdown** repository
 
 6. Search for **capstone-project** and then click **Connect**
 
-7. Under the **Resources** tab, search and install **Heroku Postgres**
+7. On the **Resources** tab, search and install **Heroku Postgres**
 
 8. Choose your branch and use one of the deployment methods to build your app
+
+9. After your app finishes building, populate the database
+    
+    1. On the **Settings** tab, add your *API_KEY_MOCKAROO* to the **Config Vars**
+    
+    2. On the **Deploy** tab, navigate to **More** > **Run Console** and type
+    
+            flask populate-db
+            
+10. Open your Heroku app and click the admin tab to view your newly added users
 
 ## Endpoints
 
