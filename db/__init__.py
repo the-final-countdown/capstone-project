@@ -1,20 +1,21 @@
 import os
 import requests
 import click
-from datetime import datetime
+# from datetime import datetime
 
 from flask import jsonify
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
 
-db = SQLAlchemy()
+dba = SQLAlchemy()
 
+from db.tables import *
 
 def init_app(app):
     with app.app_context():
-        db.init_app(app)
-        db.create_all()
+        dba.init_app(app)
+        dba.create_all()
         app.cli.add_command(populate_users)
 
 
@@ -49,35 +50,6 @@ def populate_users():
 
 # Models
 
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.Text, unique=True, nullable=False)
-    password = db.Column(db.Text, nullable=False)
-    first_name = db.Column(db.Text)
-    last_name = db.Column(db.Text)
-    address = db.Column(db.Text)
-    city = db.Column(db.Text)
-    state = db.Column(db.Text)
-    zip_code = db.Column(db.Text)
-    telephone = db.Column(db.Text)
-    created_on = db.Column(db.TIMESTAMP, nullable=False, default=datetime.utcnow)
-    is_admin = db.Column(db.Boolean, default=False)
-
-    def __repr__(self):
-        return f'<User {self.email}'
-
-
-class Portfolio(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    display_name = db.Column(db.Text)
-    created_on = db.Column(db.TIMESTAMP, nullable=False, default=datetime.utcnow)
-
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('users', lazy=True))
-
-    def __repr__(self):
-        return f'<Portfolio {self.display_name} (Owned by {self.user})'
 
 
 # Queries
@@ -117,8 +89,8 @@ def create_user(user):
         telephone=user.get('telephone', None)
     )
 
-    db.session.add(new_user)
-    db.session.commit()
+    dba.session.add(new_user)
+    dba.session.commit()
 
 
 def get_user_by_id(user_id):
