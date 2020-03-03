@@ -3,18 +3,26 @@
 {% block content %}
     <h1>{% block title %}Admin{% endblock %} page</h1>
 
-    <table>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email Address</th>
-        </tr>
-        {% for user in users %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Email Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
             <tr>
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
                 <td>{{ user.email }}</td>
             </tr>
-        {% endfor %}
+            {% endfor %}
+        </tbody>
     </table>
+  
 {% endblock %}
+
+  
+  

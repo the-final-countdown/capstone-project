@@ -1,24 +1,26 @@
-<header>
-    <nav>
-
-        <ul>
-
-            <li><a href="{{ url_for('index') }}">Capstone Project</a></li>
-
-            <li><a href="{{ url_for('admin.admin') }}">Admin</a></li>
-
-            {% if g.user %}
-
-                <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-
-            {% else %}
-
-                <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-                <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-
-            {% endif %}
-    
-        </ul>
-
+<header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand mr-4" href="/">TFC</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+                <div class="navbar-nav mr-auto">
+                    <a class="nav-item nav-link" href="{{ url_for('index') }}">Capstone Project</a>
+                    <a class="nav-item nav-link" href="{{ url_for('admin.admin') }}">Admin</a>
+                </div>
+                <!-- Navbar Right Side -->
+                <div class="navbar-nav">
+                    {% if g.user %}
+                    <a class="nav-item nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                    {% else %}
+                    <a class="nav-item nav-link" href="{{ url_for('auth.register') }}">Register</a>
+                    <a class="nav-item nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </nav>
 </header>
