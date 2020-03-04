@@ -2,6 +2,7 @@ from datetime import datetime
 from db import dba
 from flask_sqlalchemy import SQLAlchemy
 
+
 class User(dba.Model):
     __tablename__ = 'user'
     id = dba.Column(dba.Integer, primary_key=True)
@@ -33,6 +34,7 @@ class Portfolio(dba.Model):
     def __repr__(self):
         return f'<Portfolio {self.display_name} (Owned by {self.user})'
 
+
 class Transaction(dba.Model):
     __tablename__ = 'transaction'
     id = dba.Column(dba.Integer, primary_key=True)
@@ -57,7 +59,7 @@ class Stock(dba.Model):
     __tablename__ = 'stock'
     id = dba.Column(dba.Integer, primary_key=True)
     stock_symbol = dba.Column(dba.Text, nullable=False)
-    company_name = dba.Column(dba.Text, nullable=False)
+    company_name = dba.Column(dba.Text)
 
     def __repr__(self):
         return f'<Stock {self.stock_symbol} (ID {self.id}): {self.company_name}'
@@ -72,6 +74,7 @@ class Stock_History(dba.Model):
     low = dba.Column(dba.Float)
     open = dba.Column(dba.Float)
     close = dba.Column(dba.Float)
+    volume = dba.Column(dba.Integer)
 
     def __repr__(self):
         return f'<History of stock {self.fk_stock_id} (ID {self.id}) on {self.date}'
