@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template
 
-import db
+from db.tables import Stock
 
 bp = Blueprint('portfolio', __name__)
 
 
 @bp.route('/')
 def index():
-    stocks = db.get_all_stocks()
+    stocks = Stock.query.all()
     return render_template('index.html', stocks=stocks)

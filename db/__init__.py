@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash
 dba = SQLAlchemy()
 
 from db.tables import *
-from stocklist import stock_symbols
+from stock_fetcher.top100 import stock_symbols
 
 
 def init_app(app):
@@ -48,7 +48,7 @@ def populate_users():
         with click.progressbar(json_users, label='Populating user table...') as progress_bar:
             for user in progress_bar:
                 error = create_user(user)
-                if error is not None:
+                if error:
                     errors += 1
 
         # return a summary and print it to console
@@ -103,7 +103,7 @@ def populate_stock_history():
                 else:
                     # attempt to add the stock history
                     error = add_stock_history(stock_data)
-                    if error is not None:
+                    if error:
                         errors += 1
             else:
                 errors += 1
@@ -127,7 +127,10 @@ def create_user(user):
 
     if 'email' not in user:
         return 'Email required'
-    elif get_user_by_email(user['email']) is not None:
+
+    existing_user = bool(User.query.filter(User.email == user['email']).first())
+
+    if existing_user:
         return 'This email address is already registered'
     elif 'password' not in user:
         return 'Password required'
@@ -154,35 +157,6 @@ def create_user(user):
     dba.session.commit()
 
 
-def get_user_by_id(user_id):
-    """
-    Get the user by their id
-
-    :param user_id: the id of the user
-    :return: the user or None
-    """
-    return User.query.filter(User.id == user_id).first()
-
-
-def get_user_by_email(email):
-    """
-    Get the user by their id
-
-    :param email: the email address of the user
-    :return: the user or None
-    """
-    return User.query.filter(User.email == email).first()
-
-
-def get_all_users():
-    """
-    Gets all users
-
-    :return: all users in the User table
-    """
-    return User.query.order_by(User.last_name, User.first_name).all()
-
-
 def add_stock(stock):
     """
     Adds a stock to the Stock table
@@ -200,25 +174,6 @@ def add_stock(stock):
 
     dba.session.add(new_stock)
     dba.session.commit()
-
-
-def get_stock_by_symbol(symbol):
-    """
-    Returns the stock that matches the given symbol
-
-    :param symbol: the symbol to lookup
-    :return: the stock or None
-    """
-    return Stock.query.filter(Stock.stock_symbol == symbol).first()
-
-
-def get_all_stocks():
-    """
-    Gets all the stocks
-
-    :return: all stocks from the Stock table
-    """
-    return Stock.query.order_by(Stock.stock_symbol).all()
 
 
 def add_stock_history(stock_data):
@@ -244,7 +199,7 @@ def add_stock_history(stock_data):
     """
 
     symbol = stock_data['name']
-    stock = get_stock_by_symbol(symbol)
+    stock = Stock.query.filter(Stock.stock_symbol == symbol).first()
 
     if stock is None:
         return f'No stock in database matching {symbol}.'
@@ -272,7 +227,7 @@ def get_stock_history_by_symbol(symbol):
     :param symbol: the symbol to lookup
     :return: the history of the stock matching the symbol or None
     """
-    stock = get_stock_by_symbol(symbol)
+    stock = Stock.query.filter(Stock.stock_symbol == symbol).first()
 
     if stock is None:
         return None

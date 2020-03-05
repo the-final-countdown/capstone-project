@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template
 
-import db
+from db.tables import User
 
 bp = Blueprint('admin', __name__)
 
 
 @bp.route('/admin')
 def admin():
-    user = db.get_all_users()
+    users = User.query.all()
 
-    return render_template('admin.html', users=user)
+    return render_template('admin.html', users=users)
