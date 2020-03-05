@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash
 dba = SQLAlchemy()
 
 from db.tables import *
-from stock_fetcher.top100 import stock_symbols
+from stock_fetcher import top100
 
 
 def init_app(app):
@@ -61,7 +61,7 @@ def populate_users():
 
 def populate_stocks():
 
-    with click.progressbar(stock_symbols, label='Populating stock table...') as progress_bar:
+    with click.progressbar(top100.tickers, label='Populating stock table...') as progress_bar:
         for symbol in progress_bar:
             stock = {
                 'stock_symbol': symbol
@@ -74,7 +74,7 @@ def populate_stock_history():
 
     thirty_days_ago = str(date.today() - timedelta(days=30))
 
-    with click.progressbar(stock_symbols, label='Populating stock history table...') as progress_bar:
+    with click.progressbar(top100.tickers, label='Populating stock history table...') as progress_bar:
 
         errors = 0
         unrecognized_symbols = []
