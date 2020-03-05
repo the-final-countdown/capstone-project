@@ -7,11 +7,8 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
-                <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link" href="{{ url_for('index') }}">Capstone Project</a>
-                </div>
                 <!-- Navbar Right Side -->
-                <div class="navbar-nav">
+                <div class="navbar-nav ml-auto">
                     {% if g.user %}
                     <a class="nav-item nav-link" href="{{ url_for('admin.admin') }}">Admin</a>
                     <a class="nav-item nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
