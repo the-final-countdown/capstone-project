@@ -219,17 +219,3 @@ def add_stock_history(stock_data):
 
         dba.session.add(new_stock_history)
         dba.session.commit()
-
-
-def get_stock_history_by_symbol(symbol):
-    """
-
-    :param symbol: the symbol to lookup
-    :return: the history of the stock matching the symbol or None
-    """
-    stock = Stock.query.filter(Stock.stock_symbol == symbol).first()
-
-    if stock is None:
-        return None
-
-    return Stock_History.query.filter(Stock_History.fk_stock_id == stock.id).all()
