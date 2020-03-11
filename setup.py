@@ -11,8 +11,8 @@ setup(
         'flask',
         'flask-sqlalchemy',
         'gunicorn',
-        'python-dotenv',
         'requests',
         'Werkzeug',
+        'yfinance'
     ],
 )
