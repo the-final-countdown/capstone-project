@@ -18,8 +18,10 @@ class User(dba.Model):
     created_on = dba.Column(dba.TIMESTAMP, nullable=False, default=datetime.utcnow)
     is_admin = dba.Column(dba.Boolean, default=False)
 
+    portfolios = dba.relationship('Portfolio', backref=dba.backref('user'))
+
     def __repr__(self):
-        return f'<User {self.email}'
+        return f'<User {self.email}>'
 
 
 class Portfolio(dba.Model):
@@ -29,10 +31,9 @@ class Portfolio(dba.Model):
     created_on = dba.Column(dba.TIMESTAMP, nullable=False, default=datetime.utcnow)
 
     user_id = dba.Column(dba.Integer, dba.ForeignKey('user.id'), nullable=False)
-    user = dba.relationship('User', backref=dba.backref('users', lazy=True))
 
     def __repr__(self):
-        return f'<Portfolio {self.display_name} (Owned by {self.user})'
+        return f'<Portfolio {self.display_name} (Owned by {self.user})>'
 
 
 class Transaction(dba.Model):
@@ -52,7 +53,7 @@ class Transaction(dba.Model):
     #     return self.sell_price - self.purchase_price
 
     def __repr__(self):
-        return f'<Transaction of stock {self.fk_stock_id} (Owned by portfolio {self.fk_portfolio_id})'
+        return f'<Transaction of stock {self.fk_stock_id} (Owned by portfolio {self.fk_portfolio_id})>'
 
 
 class Stock(dba.Model):
@@ -62,7 +63,7 @@ class Stock(dba.Model):
     company_name = dba.Column(dba.Text)
 
     def __repr__(self):
-        return f'<Stock {self.stock_symbol} (ID {self.id}): {self.company_name}'
+        return f'<Stock {self.stock_symbol} (ID {self.id}): {self.company_name}>'
 
 
 class Stock_History(dba.Model):
@@ -77,4 +78,4 @@ class Stock_History(dba.Model):
     volume = dba.Column(dba.Integer)
 
     def __repr__(self):
-        return f'<History of stock {self.fk_stock_id} (ID {self.id}) on {self.date}'
+        return f'<History of stock {self.fk_stock_id} (ID {self.id}) on {self.date}>'

@@ -1,7 +1,9 @@
 import os
+from datetime import date, timedelta
+import random
+
 import requests
 import click
-from datetime import date, timedelta
 
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
@@ -24,6 +26,7 @@ def init_app(app):
 @with_appcontext
 def populate_db():
     populate_users()
+    create_portfolios()
     populate_stocks()
     populate_stock_history()
 
@@ -111,6 +114,19 @@ def populate_stock_history():
     # return a summary and print it to console
     click.echo(f'Finished with {errors} errors.')
     click.echo(f'Symbols not found: {unrecognized_symbols}')
+
+
+def create_portfolios():
+    min = 1
+    max = 3
+
+    users = User.query.all()
+
+    with click.progressbar(users, label='Creating portfolios...') as progress_bar:
+        for user in progress_bar:
+            num_portfolios = random.randrange(min, max + 1)
+            for i in range(num_portfolios):
+                create_portfolio(user.id, f'Portfolio {i + 1}')
 
 
 # Queries
@@ -219,3 +235,12 @@ def add_stock_history(stock_data):
 
         dba.session.add(new_stock_history)
         dba.session.commit()
+
+def create_portfolio(user_id, display_name):
+    portfolio = Portfolio(
+        user_id=user_id,
+        display_name=display_name
+    )
+
+    dba.session.add(portfolio)
+    dba.session.commit()

@@ -9,6 +9,7 @@
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
                 <th scope="col">Email Address</th>
+                <th scope="col"># Portfolios</th>
             </tr>
         </thead>
         <tbody>
@@ -17,12 +18,10 @@
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
                 <td>{{ user.email }}</td>
+                <td>{{ user.portfolios|length }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-  
-{% endblock %}
 
-  
-  
+{% endblock %}

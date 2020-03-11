@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-from db.tables import User
+from db.tables import User, Portfolio
 
 bp = Blueprint('admin', __name__)
 
