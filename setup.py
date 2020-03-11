@@ -11,6 +11,7 @@ setup(
         'flask',
         'flask-sqlalchemy',
         'gunicorn',
+        'psycopg2',
         'requests',
         'Werkzeug',
         'yfinance'
