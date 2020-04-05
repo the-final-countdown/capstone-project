@@ -12,7 +12,7 @@ from pandas_datareader import data as pdr
 import pandas as pd
 import numpy as np
 import yfinance as yf
-from random import random
+import random
 
 db = SQLAlchemy()
 
@@ -22,6 +22,7 @@ def init_app(app):
         db.create_all()
         populate_users()
         create_stocks()
+        create_portfolio()
 
 def populate_users():
     with open('MOCK_DATA.csv', newline='') as csvfile:
@@ -43,25 +44,30 @@ class User(db.Model):
     telephone = db.Column(db.Text)
     created_on = db.Column(db.TIMESTAMP, nullable=False, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, default=False)
-    portfolio = db.relationship('Portfolio', backref='port', lazy=True)
+    portfolios = db.relationship('Portfolio', backref='port', lazy=True)
 
-
-    def __repr__(self):
-        return f'<User {self.email}'
+class Smarket(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    stock_name = db.Column(db.String(80), unique=False)
+    date = db.Column(db.String(120), unique=False)
+    open = db.Column(db.String(120), unique=False)
+    high = db.Column(db.Float, unique=False)
+    low = db.Column(db.Float, unique=False)
+    close = db.Column(db.Float, unique=False)
+    adj_close = db.Column(db.Float, unique=False)
+    volume = db.Column(db.Float, unique=False)
 
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     stock_name = db.Column(db.String(80), unique=False)
     stock_symbol = db.Column(db.String(10), unique=False)
 
-
 class Portfolio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     display_name = db.Column(db.Text)
     created_on = db.Column(db.TIMESTAMP, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-
+    
 
 # Queries
 def create_stocks():
@@ -72,6 +78,7 @@ def create_stocks():
             db.session.commit()
 
 def create_user(user):
+    
     new_user = User(
         email=user['email'],
         password=generate_password_hash(user['password']),
@@ -81,6 +88,21 @@ def create_user(user):
     db.session.add(new_user)
     db.session.commit()
 
+def create_portfolio():
+    i=300
+    while i !=0:
+        random_number = random.randrange(1, 101)
+        user = User.query.get(random_number)
+        with open('STOCK_DATA.csv') as f:
+            reader =csv.reader(f)
+            chosen_row = random.choice(list(reader))
+        
+        stk_name = chosen_row[0]
+        portf = Portfolio(display_name=stk_name, port=user)
+        db.session.add(portf)
+        db.session.commit()
+
+        i -= 1
 
 
 
