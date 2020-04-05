@@ -14,8 +14,9 @@ bp = Blueprint('admin', __name__)
 def admin():
     if request.method == 'POST':
         ticker = request.form.get('ticker')
+        comp_data = db.Stock.query.filter_by(stock_symbol=ticker).first()
         main(ticker)
-        return render_template('stocks.html', values=db.Smarket.query.all())
+        return render_template('stocks.html', values=db.Smarket.query.all(), comp_data=comp_data)
     else:
         user = db.get_all_users()
         return render_template('admin.html', users=user)

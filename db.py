@@ -25,10 +25,10 @@ def init_app(app):
         create_portfolio()
 
 def populate_users():
-    with open('MOCK_DATA.csv', newline='') as csvfile:
+    with open('USER_DATA.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            create_user(row)
+            generate_user(row)
         
 #Models
 class User(db.Model):
@@ -77,19 +77,41 @@ def create_stocks():
             db.session.add(Stock(stock_name=row['stock_name'], stock_symbol=row['stock_symbol']))
             db.session.commit()
 
-def create_user(user):
+def generate_user(user):
     
     new_user = User(
         email=user['email'],
         password=generate_password_hash(user['password']),
         first_name=user['first_name'],
         last_name=user['last_name'],
+        address=user['address'],
+        city=user['city'],
+        state=user['state'],
+        telephone=user['phone']
     )
     db.session.add(new_user)
     db.session.commit()
 
+def create_user(user):
+    new_user = User(
+        email=user['email'],
+        password=generate_password_hash(user['password']),
+        first_name=user['first-name'],
+        last_name=user['last-name'],
+
+        # null values permitted
+        address=user.get('address', None),
+        city=user.get('city', None),
+        state=user.get('state', None),
+        zip_code=user.get('zip-code', None),
+        telephone=user.get('telephone', None)
+    )
+
+    db.session.add(new_user)
+    db.session.commit()
+
 def create_portfolio():
-    i=300
+    i=800
     while i !=0:
         random_number = random.randrange(1, 101)
         user = User.query.get(random_number)
