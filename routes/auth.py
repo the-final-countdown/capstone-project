@@ -11,17 +11,15 @@ bp = Blueprint('auth', __name__)
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        error = db.create_user({
+        db.create_user({
             'first-name': request.form.get('first-name'),
             'last-name': request.form.get('last-name'),
             'email': request.form.get('email'),
             'password': request.form.get('password'),
         })
-
-        if error is None:
-            return redirect(url_for('auth.login'))
-        else:
-            flash(error)
+        return redirect(url_for('auth.login'))
+    else:
+        return render_template('auth/register.html')
 
     return render_template('auth/register.html')
 
