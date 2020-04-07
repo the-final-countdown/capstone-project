@@ -256,6 +256,11 @@ def get_all_stocks():
     """
     return Stock.query.order_by(Stock.stock_symbol).all()
 
+def get_stock_by_symbol(p_stock_symbol: str):
+    return Stock.query.filter(Stock.stock_symbol==p_stock_symbol).first()
+
+def get_stock_by_id(p_stock_id: int):
+    return Stock.query.filter(Stock.id==p_stock_id).first()
 
 def create_stock(stock):
 

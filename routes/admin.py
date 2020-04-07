@@ -25,14 +25,16 @@ def admin():
         return json.dumps(retVal)
 
 
+    user = db.get_all_users()
+    return render_template('admin.html', users=user)
 
-    if request.method == 'POST':
-        user_id = request.form.get('user-id')
-        data = db.Portfolio.query.filter_by(user_id=user_id).all()
-        return render_template('portfolio.html', values=data)
-    else:
-        user = db.get_all_users()
-        return render_template('admin.html', users=user)
+    # if request.method == 'POST':
+    #     user_id = request.form.get('user-id')
+    #     data = db.Portfolio.query.filter_by(user_id=user_id).all()
+    #     return render_template('portfolio.html', values=data)
+    # else:
+    #     user = db.get_all_users()
+    #     return render_template('admin.html', users=user)
 
 
 def main(ticker):

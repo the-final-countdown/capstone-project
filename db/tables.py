@@ -95,11 +95,15 @@ class Transaction(dba.Model):
 class Stock(dba.Model):
     __tablename__ = 'stock'
     id = dba.Column(dba.Integer, primary_key=True)
-    stock_symbol = dba.Column(dba.Text, nullable=False)
+    stock_symbol = dba.Column(dba.Text, unique=True, nullable=False)
     company_name = dba.Column(dba.Text, nullable=False)
 
     def __repr__(self):
         return f'<Stock {self.stock_symbol} (ID {self.id}): {self.company_name}'
+
+    def get_stock_history(self):
+        return Stock_History.query.filter(Stock_History.fk_stock_id == self.id)\
+            .order_by(Stock_History.date.desc()).all()
 
 
 class Stock_History(dba.Model):

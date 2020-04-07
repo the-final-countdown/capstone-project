@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block title %}Stock Info{% endblock %}
+
+{% block content %}
+<table class="table">
+    <h2>{{ values.stock.stock_symbol }} - {{ values.stock.company_name }}</h2>
+
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Open</th>
+        <th scope="col">Close</th>
+        <th scope="col">High</th>
+        <th scope="col">Low</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for item in values.history %}
+        <tr>
+            <th scope="row">{{item.date}}</th>
+            <td>{{item.open}}</td>
+            <td>{{item.close}}</td>
+            <td>{{item.high}}</td>
+            <td>{{item.low}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+
+{% endblock %}

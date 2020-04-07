@@ -4,6 +4,8 @@
 
 {% block content %}
 <table class="table">
+    <h2>Portfolios - {{ values.user.first_name }} {{ values.user.last_name }}</h2>
+
     <thead>
       <tr>
         <th scope="col">ID</th>
@@ -21,24 +23,12 @@
             <td>{{item.created_on}}</td>
             <td>{{item.user_id}}</td>
             <td>
-                <a href="/user_portfolios/{{ item.user_id }}/{{ item.id }}">View Transaction Record</a>
+                <a href="{{ url_for('db_access.portfolio_transactions', user_id=item.user_id, portfolio_id=item.id) }}">View Transaction Record</a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
   </table>
   
-  <!---
-  {% for transaction in transactions %}
-   <p>transaction.id</p>
-   <p>transaction.fk_portfolio</p>
-   <p>transaction.fk_stock_id</p>
-   <p>transaction.number_shares</p>
-   <p>transaction.purchase_date</p>
-   <p>transaction.purchase_price</p>
-   <p>transaction.sell_on</p>
-   <p>transaction.sell_price</p>
-   <p>transaction.transaction_finalized</p>
-  {% endfor %}
--->
+
 {% endblock %}

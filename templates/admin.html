@@ -18,11 +18,11 @@
                 <td>{{ user.last_name }}</td>
                 <td>{{ user.email }}</td>
                 <td>
-                    <form action="" method="post">
-                        <input type="hidden" value="{{ user.id }}" name="user-id">
-                        <button type="submit">Portfolio</button>
-                    </form>
-                    <a href="/user_portfolios/{{ user.id }}">View Portfolios</a>
+{#                    <form action="" method="post">#}
+{#                        <input type="hidden" value="{{ user.id }}" name="user-id">#}
+{#                        <button type="submit">Portfolio</button>#}
+{#                    </form>#}
+                    <a href="{{ url_for('db_access.specific_user_portfolios', user_id=user.id) }}">View Portfolios</a>
                 </td>
             </tr>
             {% endfor %}

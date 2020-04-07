@@ -93,4 +93,30 @@ def portfolio_transactions(user_id: int, portfolio_id: int):
     })
 
 
+@bp.route('/stock/<string:stock_lookup>', methods=('GET', 'POST'))
+def show_stock(stock_lookup: str):
+    retVal = {'error': 'none'}
 
+    thisStock: db.Stock = None
+
+    if stock_lookup.isdigit():
+        thisStock = db.get_stock_by_id(int(stock_lookup))
+    else:
+        thisStock = db.get_stock_by_symbol(stock_lookup.upper())
+
+    if thisStock is None:
+        retVal['error'] = "stock not found"
+        return json.dumps(retVal)
+
+
+    return render_template('stock_info.html', values={
+        'stock': thisStock,
+        'history': thisStock.get_stock_history()
+    })
+
+
+    # if request.method == 'GET':
+#     #     user_id = request.form.get('stock_symbol')
+#     #     data = db.Portfolio.query.filter_by(user_id=user_id).all()
+#     #     return render_template('portfolio.html', values=data)
+#     # else:
