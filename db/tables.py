@@ -1,6 +1,7 @@
 from datetime import datetime
 from db import dba
 from flask_sqlalchemy import SQLAlchemy
+import json
 
 class User(dba.Model):
     __tablename__ = 'user'
@@ -57,7 +58,7 @@ class Transaction(dba.Model):
     #     return self.sell_price - self.purchase_price
 
     def __repr__(self):
-        return f'<Transaction of stock {self.fk_stock_id} (Owned by portfolio {self.fk_portfolio_id})'
+        return json.dumps(self.ToDict())
 
 
     def ToDict(self):
