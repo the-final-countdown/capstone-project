@@ -13,10 +13,9 @@ bp = Blueprint('admin', __name__)
 @bp.route('/admin', methods=['GET', 'POST'])
 def admin():
     if request.method == 'POST':
-        ticker = request.form.get('ticker')
-        comp_data = db.Stock.query.filter_by(stock_symbol=ticker).first()
-        main(ticker)
-        return render_template('stocks.html', values=db.Smarket.query.all(), comp_data=comp_data)
+        user_id = request.form.get('user-id')
+        data = db.Portfolio.query.filter_by(user_id=user_id).all()
+        return render_template('stocks.html', values=data)
     else:
         user = db.get_all_users()
         return render_template('admin.html', users=user)
