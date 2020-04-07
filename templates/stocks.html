@@ -3,37 +3,40 @@
 {% block title %}Portfolio{% endblock %}
 
 {% block content %}
-<h1>{{comp_data.stock_name}} - YTD Data</h1>
 <table class="table">
     <thead>
       <tr>
-        <th scope="col">Stock Name</th>
-        <th scope="col">Date</th>
-        <th scope="col">Open</th>
-        <th scope="col">High</th>
-        <th scope="col">Low</th>
-        <th scope="col">Close</th>
-        <th scope="col">Adj Close</th>
-        <th scope="col">Volume</th>
+        <th scope="col">ID</th>
+        <th scope="col">Display Name</th>
+        <th scope="col">Created On</th>
+        <th scope="col">UserID</th>
+        <th scope="col">Transaction</th>
       </tr>
     </thead>
-    <tbody>
-    {% block table %}
-        
+    <tbody>        
         {% for item in values%}
         <tr>
-            <th scope="row">{{item.stock_name}}</th>
-            <td>{{item.date}}</td>
-            <td>{{item.open}}</td>
-            <td>{{item.high}}</td>
-            <td>{{item.low}}</td>
-            <td>{{item.close}}</td>
-            <td>{{item.adj_close}}</td>
-            <td>{{item.volume}}</td>
+            <th scope="row">{{item.id}}</th>
+            <td>{{item.display_name}}</td>
+            <td>{{item.created_on}}</td>
+            <td>{{item.user_id}}</td>
+            <td>{{item.get_transactions()}}</td>
         </tr>
         {% endfor %}
-    {% endblock table %}  
-
     </tbody>
   </table>
+  
+  <!---
+  {% for transaction in transactions %}
+   <p>transaction.id</p>
+   <p>transaction.fk_portfolio</p>
+   <p>transaction.fk_stock_id</p>
+   <p>transaction.number_shares</p>
+   <p>transaction.purchase_date</p>
+   <p>transaction.purchase_price</p>
+   <p>transaction.sell_on</p>
+   <p>transaction.sell_price</p>
+   <p>transaction.transaction_finalized</p>
+  {% endfor %}
+-->
 {% endblock %}
