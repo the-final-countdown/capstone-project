@@ -5,6 +5,8 @@ from werkzeug.security import check_password_hash
 
 import db
 
+import json
+
 bp = Blueprint('auth', __name__)
 
 
@@ -77,3 +79,6 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+

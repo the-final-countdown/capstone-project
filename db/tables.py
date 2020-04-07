@@ -20,6 +20,9 @@ class User(dba.Model):
     def __repr__(self):
         return f'<User {self.email}'
 
+    def get_portfolios(self):
+        return Portfolio.query.filter(Portfolio.user_id==self.id).all()
+
 
 class Portfolio(dba.Model):
     __tablename__ = 'portfolio'
@@ -33,6 +36,10 @@ class Portfolio(dba.Model):
     def __repr__(self):
         return f'<Portfolio {self.display_name} (Owned by {self.user})'
 
+    def get_transactions(self):
+        return Transaction.query.filter(Transaction.fk_portfolio_id == self.id).all()
+
+
 class Transaction(dba.Model):
     __tablename__ = 'transaction'
     id = dba.Column(dba.Integer, primary_key=True)
@@ -43,7 +50,7 @@ class Transaction(dba.Model):
     purchase_price = dba.Column(dba.Float)
     sell_on = dba.Column(dba.TIMESTAMP, nullable=True)
     sell_price = dba.Column(dba.Float)
-    transaction_finalized = dba.Column
+    transaction_finalized = dba.Column(dba.BOOLEAN, default=False)
 
     # @dba.hybrid_property
     # def profit_loss(self):
@@ -51,6 +58,20 @@ class Transaction(dba.Model):
 
     def __repr__(self):
         return f'<Transaction of stock {self.fk_stock_id} (Owned by portfolio {self.fk_portfolio_id})'
+
+
+    def ToDict(self):
+        return {
+            'id': self.id,
+            'fk_portfolio_id': self.fk_portfolio_id,
+            'fk_stock_id': self.fk_stock_id,
+            'number_shares': self.number_shares,
+            'purchase_date': str(self.purchase_date),
+            'purchase_price': self.purchase_price,
+            'sell_on': str(self.sell_on),
+            'sell_price': self.sell_price,
+            'transaction_finalized': self.transaction_finalized
+        }
 
 
 class Stock(dba.Model):

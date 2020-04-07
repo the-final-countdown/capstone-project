@@ -8,6 +8,7 @@ import db
 from routes import index
 from routes import auth
 from routes import admin
+from routes import db_access
 
 
 def create_app(test_config=None):
@@ -41,5 +42,8 @@ def create_app(test_config=None):
 
     # admin
     app.register_blueprint(admin.bp)
+
+    # db_access
+    app.register_blueprint(db_access.bp)
 
     return app

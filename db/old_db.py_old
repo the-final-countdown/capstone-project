@@ -25,7 +25,7 @@ def init_app(app):
         create_portfolio()
 
 def populate_users():
-    with open('USER_DATA.csv', newline='') as csvfile:
+    with open('../USER_DATA.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             generate_user(row)
@@ -71,7 +71,7 @@ class Portfolio(db.Model):
 
 # Queries
 def create_stocks():
-    with open('STOCK_DATA.csv', newline='') as csvfile:
+    with open('../STOCK_DATA.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             db.session.add(Stock(stock_name=row['stock_name'], stock_symbol=row['stock_symbol']))
@@ -115,7 +115,7 @@ def create_portfolio():
     while i !=0:
         random_number = random.randrange(1, 101)
         user = User.query.get(random_number)
-        with open('STOCK_DATA.csv') as f:
+        with open('../STOCK_DATA.csv') as f:
             reader =csv.reader(f)
             chosen_row = random.choice(list(reader))
         
