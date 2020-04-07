@@ -20,8 +20,8 @@ def register():
             'password': request.form.get('password'),
         })
         return redirect(url_for('auth.login'))
-    else:
-        return render_template('auth/register.html')
+    # else:
+    #     return render_template('auth/register.html')
 
     return render_template('auth/register.html')
 
@@ -68,6 +68,7 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = db.get_user_by_id(user_id)
+
 
 
 def login_required(view):

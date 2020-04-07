@@ -14,13 +14,15 @@
       </tr>
     </thead>
     <tbody>        
-        {% for item in values%}
+        {% for item in values.portfolios%}
         <tr>
             <th scope="row">{{item.id}}</th>
             <td>{{item.display_name}}</td>
             <td>{{item.created_on}}</td>
             <td>{{item.user_id}}</td>
-            <td>{{item.get_transactions()}}</td>
+            <td>
+                <a href="/user_portfolios/{{ item.user_id }}/{{ item.id }}">View Transaction Record</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

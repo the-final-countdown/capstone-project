@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block title %}Portfolio{% endblock %}
+
+{% block content %}
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Stock ID</th>
+        <th scope="col">Number of Shares</th>
+        <th scope="col">Purchase Date</th>
+        <th scope="col">Purchase Price</th>
+        <th scope="col">Sold On</th>
+        <th scope="col">Sold Price</th>
+        <th scope="col">Transaction Finalized</th>
+      </tr>
+    </thead>
+    <tbody>        
+        {% for tr in values.transactions%}
+        <tr>
+            <th scope="row">{{tr.get_stock().company_name}} ({{ tr.get_stock().stock_symbol }})</th>
+            <td>{{tr.number_shares}}</td>
+            <td>{{tr.purchase_date}}</td>
+            <td>{{tr.purchase_price}}</td>
+            <td>{{tr.sell_on}}</td>
+            <td>{{tr.sell_price}}</td>
+            <td>{{tr.transaction_finalized}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  
+  <!---
+  {% for transaction in transactions %}
+   <p>transaction.id</p>
+   <p>transaction.fk_portfolio</p>
+   <p>transaction.fk_stock_id</p>
+   <p>transaction.number_shares</p>
+   <p>transaction.purchase_date</p>
+   <p>transaction.purchase_price</p>
+   <p>transaction.sell_on</p>
+   <p>transaction.sell_price</p>
+   <p>transaction.transaction_finalized</p>
+  {% endfor %}
+-->
+{% endblock %}

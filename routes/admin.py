@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, Flask, request
+from flask import Blueprint, render_template, Flask, request, g
 import random
 import db
 from pandas_datareader import data as pdr
@@ -6,16 +6,30 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 import datetime as dt
+import json
 
 bp = Blueprint('admin', __name__)
 
 
 @bp.route('/admin', methods=['GET', 'POST'])
 def admin():
+
+    retVal = {'error': 'none'}
+
+    if g.user is None:
+        retVal['error'] = "not logged in"
+        return json.dumps(retVal)
+
+    if not g.user.is_admin:
+        retVal['error'] = "logged in user must be admin"
+        return json.dumps(retVal)
+
+
+
     if request.method == 'POST':
         user_id = request.form.get('user-id')
         data = db.Portfolio.query.filter_by(user_id=user_id).all()
-        return render_template('stocks.html', values=data)
+        return render_template('portfolio.html', values=data)
     else:
         user = db.get_all_users()
         return render_template('admin.html', users=user)

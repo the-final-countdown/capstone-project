@@ -21,14 +21,22 @@ class User(dba.Model):
     def __repr__(self):
         return f'<User {self.email}'
 
+
     def get_portfolios(self):
         return Portfolio.query.filter(Portfolio.user_id==self.id).all()
+
+    def get_portfolio_by_name(self, display_name: str):
+        return Portfolio.query.filter(Portfolio.user_id==self.id, Portfolio.display_name==display_name).first()
+
+    def get_portfolio_by_id(self, this_id: int):
+        return Portfolio.query.filter(Portfolio.user_id==self.id, Portfolio.id==this_id).first()
 
 
 class Portfolio(dba.Model):
     __tablename__ = 'portfolio'
     id = dba.Column(dba.Integer, primary_key=True)
     display_name = dba.Column(dba.Text)
+    # display_name = dba.Column(dba.Text, unique=True)
     created_on = dba.Column(dba.TIMESTAMP, nullable=False, default=datetime.utcnow)
 
     user_id = dba.Column(dba.Integer, dba.ForeignKey('user.id'), nullable=False)
@@ -36,6 +44,10 @@ class Portfolio(dba.Model):
 
     def __repr__(self):
         return f'<Portfolio {self.display_name} (Owned by {self.user})'
+
+
+    # def get_link_name(self):
+    #     return self.display_name.replace(" ", "_")
 
     def get_transactions(self):
         return Transaction.query.filter(Transaction.fk_portfolio_id == self.id).all()
@@ -60,6 +72,11 @@ class Transaction(dba.Model):
     def __repr__(self):
         return json.dumps(self.ToDict())
 
+    def get_stock(self):
+        return Stock.query.filter(Stock.id==self.fk_stock_id).first()
+
+    def get_portfolio(self):
+        return Portfolio.query.filter(Portfolio.id==self.fk_portfolio_id).first()
 
     def ToDict(self):
         return {
