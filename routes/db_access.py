@@ -9,19 +9,59 @@ import json
 
 bp = Blueprint('db_access', __name__)
 
-@bp.route('/get_user_transactions', methods=('GET', 'POST'))
+
+@bp.route('/get_user_transactions_ajax', methods=('GET', 'POST'))
 def get_user_transactions():
-    user_id = session.get('user_id')
+    # print(g.user)
 
-    if user_id is None:
-        g.user = None
-        return json.dumps({})
-    else:
-        g.user = db.get_user_by_id(user_id)
+    retVal = {'error': 'none'}
 
-    print(g.user)
+    if g.user is None:
+        retVal['error'] = "No user is logged in."
+        return json.dumps(retVal)
 
-    retVal = {}
+    return json.dumps(g.user.get_portfolios())
+
+
+
+@bp.route('/get_user_portfolios', methods=('GET', 'POST'))
+def get_user_transactions():
+    # print(g.user)
+
+    retVal = {'error': 'none'}
+
+    if g.user is None:
+        retVal['error'] = "No user is logged in."
+        return json.dumps(retVal)
+
+
+
+    return render_template('stocks.html', values=g.user.get_portfolios())
+
+
+
+
+@bp.route('/get_user_portfolios/<int:user_id>', methods=('GET', 'POST'))
+def get_specific_user_transactions(user_id: int):
+
+    retVal = {'error': 'none'}
+
+    if g.user is None:
+        retVal['error'] = "not logged in"
+        return json.dumps(retVal)
+
+
+    if not g.user.is_admin:
+        retVal['error'] = "logged in user must be admin"
+        return json.dumps(retVal)
+
+    accessed_user = db.get_user_by_id(user_id)
+
+    if accessed_user is None:
+        if not g.user.is_admin:
+            retVal['error'] = "user does not exist"
+            return json.dumps(retVal)
+
 
     for pf in g.user.get_portfolios():
         add_tr = {}
@@ -32,4 +72,7 @@ def get_user_transactions():
         retVal[pf.display_name] = add_tr
 
     return json.dumps(retVal)
+
+
+
 
