@@ -27,8 +27,8 @@ def user_portfolios_ajax():
 @bp.route('/user_portfolios', methods=('GET', 'POST'))
 def user_portfolios():
     # print(g.user)
+        return specific_user_portfolios(g.user.id)
 
-    return specific_user_portfolios(g.user.id)
 
 
 @bp.route('/user_portfolios/<int:user_id>', methods=('GET', 'POST'))
