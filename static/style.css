@@ -29,3 +29,7 @@ body {
 .site-header{
   padding-bottom: 75px;
 }
+
+.information-card{
+  display: inline-block;
+}
