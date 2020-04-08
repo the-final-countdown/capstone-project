@@ -31,10 +31,7 @@ def init_app(app):
         app.cli.add_command(click_populate_stock_history)
         app.cli.add_command(click_generate_portfolios)
 
-        initial_startup_check: Internal_Startup = Internal_Startup.query.filter(
-            Internal_Startup.id == 0).first()
-        if initial_startup_check is None or not initial_startup_check.complete:
-            first_run()
+        first_run()
 
 
         # populate_users()
@@ -45,13 +42,21 @@ def click_first_run():
     first_run()
 
 def first_run():
-    print("Performing first run...")
+    initial_startup_check: Internal_Startup = Internal_Startup.query.filter(
+        Internal_Startup.id == 0).first()
+    if not (initial_startup_check is None) and initial_startup_check.complete:
+        print("Has run before. skipping first run...")
+        return
 
-    dba.session.add(Internal_Startup(
-            id=0,
-            complete=False
+
+    click.echo("Performing first run...")
+
+    if initial_startup_check is None:
+        dba.session.add(Internal_Startup(
+                id=0,
+                complete=False
+            )
         )
-    )
 
     create_user({
        'first-name': "The",
@@ -61,9 +66,13 @@ def first_run():
     })
 
     # populate_db()
-
+    get_user_by_email("admin@tfc.com").is_admin = True
 
     Internal_Startup.query.filter(Internal_Startup.id == 0).first().complete=True
+
+    dba.session.commit()
+    click.echo("First run complete!")
+
 
 
 @click.command('clear-db')
@@ -76,6 +85,7 @@ def clear_db(current_user: User = None):
     Portfolio.query.delete()
     Stock.query.delete()
     Stock_History.query.delete()
+    Internal_Startup.query.delete()
 
     if not current_user is None:
         User.query.filter(User.id!=current_user.id).delete()
@@ -369,7 +379,7 @@ def create_user(user):
     return new_user
 
 
-def get_user_by_id(user_id):
+def get_user_by_id(user_id) -> User:
     """
     Get the user by their id
 
@@ -379,7 +389,7 @@ def get_user_by_id(user_id):
     return User.query.filter(User.id == user_id).first()
 
 
-def get_user_by_email(email):
+def get_user_by_email(email) -> User:
     """
     Get the user by their id
 
