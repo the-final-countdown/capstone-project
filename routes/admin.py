@@ -12,6 +12,8 @@ import sys
 
 from io import StringIO
 
+import subprocess
+
 bp = Blueprint('admin', __name__)
 
 
@@ -69,59 +71,78 @@ def populate_database():
 
         sys.stdout = StringIO()
 
+    try:
+
+        retVal = {'error': 'none'}
+
+        if g.user is None:
+            retVal['error'] = "not logged in"
+            return json.dumps(retVal)
+
+        if not g.user.is_admin:
+            retVal['error'] = "logged in user must be admin"
+            return json.dumps(retVal)
 
 
-    retVal = {'error': 'none'}
+        # if request.method == 'POST':
+        print("population has started...")
 
-    if g.user is None:
-        retVal['error'] = "not logged in"
-        return json.dumps(retVal)
+        cmd = request.form.get('cmd')
 
-    if not g.user.is_admin:
-        retVal['error'] = "logged in user must be admin"
-        return json.dumps(retVal)
+        if cmd == 'clear_db':
+            db.clear_db(g.user)
+
+        elif cmd == 'populate_users':
+            db.populate_users()
 
 
-    # if request.method == 'POST':
-    print("population has started...")
+        elif cmd == 'populate_stocks':
+            db.populate_stocks()
 
-    cmd = request.form.get('cmd')
+        elif cmd == 'clean_stocks':
+            db.clean_stocks()
 
-    if cmd == 'clear_db':
-        db.clear_db(g.user)
+        elif cmd == 'populate_stock_history':
+            db.populate_stock_history()
 
-    elif cmd == 'populate_users':
-        db.populate_users()
+        elif cmd == 'generate_portfolios':
+            db.generate_portfolios()
 
-    elif cmd == 'populate_stocks':
-        db.populate_stocks()
-
-    elif cmd == 'clean_stocks':
-        db.clean_stocks()
-
-    elif cmd == 'populate_stock_history':
-        db.populate_stock_history()
-
-    elif cmd == 'generate_portfolios':
-        db.generate_portfolios()
-
-    # ####
-     # capture output
-    out = "Done!"
-
-    if capture_sdout:
-        out = sys.stdout.getvalue()  # release output
         # ####
+         # capture output
+        out = {
+            'success': True,
+            'output': ""
+        }
 
-        sys.stdout.close()  # close the stream
-        sys.stdout = old_sdout  # restore original stdout
+        if capture_sdout:
+            out['output'] = sys.stdout.getvalue()  # release output
+            # out = old_sdout.getvalue()  # release output
+            # ####
 
-        print(out)
+            sys.stdout.close()  # close the stream
+            sys.stdout = old_sdout  # restore original stdout
 
+            print(out)
 
+        return json.dumps(out)  # post processing
 
-    return out  # post processing
+    except Exception as e:
+        out = {
+            'success': False,
+            'output': ""
+        }
 
+        if capture_sdout:
+            out['output'] = sys.stdout.getvalue() + "\n<hr/>ERROR:" + str(e) # release output
+            # ####
+
+            sys.stdout.close()  # close the stream
+            sys.stdout = old_sdout  # restore original stdout
+
+            print(out)
+
+        return json.dumps(out)  # post processing
 
 
 

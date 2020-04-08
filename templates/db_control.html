@@ -6,15 +6,17 @@
 
     <h2>Database Controls:</h2>
 
-    <button onclick="populate_db('clear_db')">Clear DB </button>
-    <button onclick="populate_db('populate_users')">Populate Users</button>
-    <button onclick="populate_db('populate_stocks')">Populate Stocks</button>
-    <button onclick="populate_db('clean_stocks')">Clean Stocks</button>
-    <button onclick="populate_db('populate_stock_history')">Populate Stock History</button>
-    <button onclick="populate_db('generate_portfolios')">Generate Portfolios</button>
+    <button onclick="populate_db_cmd('clear_db', true)">Clear DB</button>
+    <button onclick="populate_db_cmd('populate_users', true)">Populate Users</button>
+    <button onclick="populate_db_cmd('populate_stocks', true)">Populate Stocks</button>
+    <button onclick="populate_db_cmd('clean_stocks', true)">Clean Stocks</button>
+    <button onclick="populate_db_cmd('populate_stock_history', true)">Populate Stock History</button>
+    <button onclick="populate_db_cmd('generate_portfolios', true)">Generate Portfolios</button>
+    <br/>
+    <button onclick="populate_db_full()">Do all...</button>
 
 
-    <input type="checkbox" id="capture_sdout" name="capture_sdout">
+    <input type="checkbox" id="capture_sdout" name="capture_sdout" checked>
     <label for="capture_sdout">Capture SdOut</label>
 
     <p id="task-status"></p>

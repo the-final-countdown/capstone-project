@@ -1,7 +1,10 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+    <a href="{{ url_for('admin.db_control_page') }}">Go To Database Control Panel</a>
+
     <h1 class="section-title">{% block title %}Admin{% endblock %} page</h1>
+
     <table class="table table-striped">
         <thead class="thead-dark">
             <tr>
