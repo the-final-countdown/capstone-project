@@ -31,7 +31,33 @@ def init_app(app):
         app.cli.add_command(click_populate_stock_history)
         app.cli.add_command(click_generate_portfolios)
 
+
+        if Internal_Startup.query.filter(Internal_Startup.id==0).first() is None:
+            first_run()
+
         # populate_users()
+
+def first_run():
+    print("Performing first run...")
+
+    dba.session.add(Internal_Startup(
+            id=0,
+            complete=False
+        )
+    )
+
+    create_user({
+       'first-name': "The",
+       'last-name': "Admin",
+       'email': "admin@tfc.com",
+       'password': "IAmTheAdmin!!1",
+    })
+
+    populate_db()
+
+    Internal_Startup.query.filter(Internal_Startup.id == 0).first().complete=True
+
+
 
 
 def clear_db(current_user: User = None):
@@ -60,11 +86,12 @@ def click_populate_db():
 
 def populate_db():
     populate_users()
-    # populate_stocks()
+    populate_stocks()
     # clean_stocks()
     # populate_stock_history()
-    # generate_portfolios()
-    print("populated")
+    populate_and_clean_stock_history()
+    generate_portfolios()
+    click.echo("population complete!")
 
 @click.command('populate-users')
 @with_appcontext
@@ -142,7 +169,7 @@ def clean_stocks():
     for id in to_remove:
         dba.engine.execute(f"DELETE FROM STOCK WHERE ID = {id}")
         dba.session.commit()
-        click.echo("All unfound stocks removed!")
+    click.echo("All unfound stocks removed!")
 
 
 @click.command('populate-stock-data')
@@ -231,7 +258,7 @@ def populate_and_clean_stock_history():
     for id in to_remove:
         dba.engine.execute(f"DELETE FROM STOCK WHERE ID = {id}")
         dba.session.commit()
-        click.echo("All unfound stocks removed!")
+    click.echo("All unfound stocks removed!")
     # dba.session.commit()
 
 @click.command('generate-portfolios')

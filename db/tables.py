@@ -118,3 +118,14 @@ class Stock_History(dba.Model):
 
     def __repr__(self):
         return f'<History of stock {self.fk_stock_id} (ID {self.id}) on {self.date}'
+
+
+class Internal_Startup(dba.Model):
+    id = dba.Column(dba.Integer, primary_key=True)
+    complete = dba.Column(dba.Boolean)
+
+
+class Internal_RefreshStockHistory(dba.Model):
+    id = dba.Column(dba.Integer, primary_key=True)
+    date = dba.Column(dba.TIMESTAMP, nullable=False, default=datetime.utcnow)
+    complete = dba.Column(dba.Boolean)
