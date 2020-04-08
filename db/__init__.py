@@ -41,6 +41,9 @@ def init_app(app):
 
 @click.command('first-run')
 @with_appcontext
+def click_first_run():
+    first_run()
+
 def first_run():
     print("Performing first run...")
 
