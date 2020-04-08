@@ -16,7 +16,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY=os.environ.get('SECRET_KEY') or 'dev',
-        SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL', 'sqlite:///capstone-project.sqlite'),
+        SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL', 'postgres://rwnmikduijwbqd:a19f5a7ac5889d6af1c7342bbc25f26a5d2f14580d588d511911c3b8b26b0cc6@ec2-18-235-20-228.compute-1.amazonaws.com:5432/d85e2kc82esup2'), 
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
