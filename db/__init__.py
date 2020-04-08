@@ -36,6 +36,8 @@ def init_app(app):
 
         # populate_users()
 
+@click.command('first-run')
+@with_appcontext
 def first_run():
     print("Performing first run...")
 
@@ -57,7 +59,10 @@ def first_run():
     Internal_Startup.query.filter(Internal_Startup.id == 0).first().complete=True
 
 
-
+@click.command('clear-db')
+@with_appcontext
+def click_clear_db():
+    clear_db()
 
 def clear_db(current_user: User = None):
     Transaction.query.delete()
