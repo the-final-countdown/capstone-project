@@ -3,10 +3,10 @@
 {% block title %}Portfolio{% endblock %}
 
 {% block content %}
-<table class="table">
-    <h2>Portfolios - {{ values.user.first_name }} {{ values.user.last_name }}</h2>
+<table class="table table-striped">
+    <h2 class="section-title">Portfolios - {{ values.user.first_name }} {{ values.user.last_name }}</h2>
 
-    <thead>
+    <thead class="thead-dark">
       <tr>
         <th scope="col">ID</th>
         <th scope="col">Display Name</th>

@@ -1,7 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>{% block title %}Login{% endblock %}</h1>
+    <h1 class="section-title">{% block title %}Login{% endblock %}</h1>
+    <div class="form-section">
     <form method="post">
         <div class="form-group">
             <label for="email">Email address</label>
@@ -13,6 +14,8 @@
         </div>
         <p><small><a href="{{ url_for('auth.register') }}">Need an Account? Sign up Now.</a></small></p>
         <button type="submit" class="btn btn-outline-success">Login</button>
+        <br><br>
     </form>
+</div>
 {% endblock %}
 

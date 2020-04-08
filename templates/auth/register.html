@@ -1,7 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>{% block title %}Register{% endblock %}</h1>
+    <h1 class="section-title">{% block title %}Register{% endblock %}</h1>
+    <div class="form-section">
     <form method="POST">
         <div class="form-group">
             <label for="first-name">First Name</label>
@@ -19,6 +20,9 @@
             <label for="password">Password</label>
             <input type="password" name="password" class="form-control" id="password">
         </div>
+        <p><small><a href="{{ url_for('auth.login') }}">Already have an Account? Sign In.</a></small></p>
         <button type="Register" class="btn btn-outline-success">Submit</button>
+        <br><br>
     </form>
+</div>
 {% endblock %}

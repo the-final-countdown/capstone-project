@@ -4,30 +4,30 @@
 
 {% block content %}
 
-<div class="jumbotron">
+<div class="jumbotron" style="background-color:#f5f5f5;">
   <h1 class="display-4">Welcome!</h1>
   <p class="lead">This is a simple stock trading website for buying, selling, and accessing stock content or information.</p>
   <hr class="my-4">
-  <p>It uses yahoo's yfinance API for current and up to date information within your porfolios history.</p>
+  <p>It uses yahoo's yfinance API for current and up to date information within your porfolio's history.</p>
   <a class="btn btn-outline-success btn-lg" href="{{ url_for('auth.login') }}" role="button">Click to get Started.</a>
 </div>
 
 
-<div class="card information-card" style="width: 33%;">
+<div class="card information-card" style="width: 33%;background-color:#f5f5f5;">
   <img src="{{ url_for('static', filename='images/jamie-street.jpg') }}" class="card-img-top" alt="...">
   <div class="card-body">
     <p class="card-text">“The four most dangerous words in investing are: “This time it’s different”.” </p>
     <p class="cvard-text">-Sir John Templeton</p>
   </div>
 </div>
-<div class="card information-card" style="width: 33%;">
+<div class="card information-card" style="width: 33%;background-color:#f5f5f5;">
   <img src="{{ url_for('static', filename='images/michael-longmire.jpg') }}" class="card-img-top" alt="...">
   <div class="card-body">
     <p class="card-text">“Investing should be more like watching paint dry or watching grass grow. If you want excitement, take $800 and go to Las Vegas.”</p>
     <p class="card-text">-Paul Samuelson</p>
   </div>
 </div>
-<div class="card information-card" style="width: 33%;">
+<div class="card information-card" style="width: 33%;background-color:#f5f5f5;">
   <img src="{{ url_for('static', filename='images/jeshoots-com.jpg') }}" class="card-img-top" alt="...">
   <div class="card-body">
     <p class="card-text">“Rule number one: Don’t lose money. Rule number two: Don’t forget rule number one.”</p>
