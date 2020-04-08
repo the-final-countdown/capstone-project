@@ -248,6 +248,8 @@ def generate_portfolios():
         for i in range(1, num_of_portfolios + 1):
             display_name = f"{user[3]} {user[4]} Portfolio {i}"
 
+            click.echo(f"generating {display_name}...")
+
             fill_portfolio(create_portfolio_params(user[0], display_name).id)
 
 
