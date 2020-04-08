@@ -25,6 +25,9 @@ def init_app(app):
         dba.create_all()
 
         # Adding click commands:
+        app.cli.add_command(click_first_run)
+        app.cli.add_command(clear_db)
+        app.cli.add_command(click_populate_db)
         app.cli.add_command(click_populate_users)
         app.cli.add_command(click_populate_stocks)
         app.cli.add_command(click_clean_stocks)
