@@ -31,7 +31,7 @@ def init_app(app):
         app.cli.add_command(click_populate_stock_history)
         app.cli.add_command(click_generate_portfolios)
 
-        first_run()
+        # first_run()
 
 
         # populate_users()
@@ -51,12 +51,12 @@ def first_run():
 
     click.echo("Performing first run...")
 
-    # if initial_startup_check is None:
-    #     dba.session.add(Internal_Startup(
-    #             id=0,
-    #             complete=False
-    #         )
-    #     )
+    if initial_startup_check is None:
+        dba.session.add(Internal_Startup(
+                id=0,
+                complete=False
+            )
+        )
 
     create_user({
        'first-name': "The",
