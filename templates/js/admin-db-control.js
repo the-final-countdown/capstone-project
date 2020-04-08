@@ -1,5 +1,7 @@
 let cmd_endpoint = '{{ url_for("admin.populate_database") }}';
 let status_div = $("#task-status");
+let sdout_box = $('#capture_sdout');
+
 
 function _addToStatus(message, newline= true) {
 
@@ -18,10 +20,10 @@ function _addToStatus(message, newline= true) {
 
 function populate_db_cmd(cmd) {
     _addToStatus("processing " + cmd);
-    // let capture_sdout = ($('#capture_sdout').prop('checked'));
+    let capture_sdout = (sdout_box.prop('checked'));
 
     console.log();
-    return $.post(cmd_endpoint, {'cmd': cmd, 'capture_sdout': true}, function(data){
+    return $.post(cmd_endpoint, {'cmd': cmd, 'capture_sdout': capture_sdout}, function(data){
         console.log(data);
 
         // _addToStatus(data['success'] ? "Success" : "ERROR");
