@@ -10,6 +10,9 @@ from routes import auth
 from routes import admin
 from routes import db_access
 
+import threading
+import time
+
 
 def create_app(test_config=None):
 
@@ -46,4 +49,8 @@ def create_app(test_config=None):
     # db_access
     app.register_blueprint(db_access.bp)
 
+
+
     return app
+
+# db.dba.app =
