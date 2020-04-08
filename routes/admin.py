@@ -71,6 +71,11 @@ def populate_database():
 
         sys.stdout = StringIO()
 
+    out = {
+        'success': True,
+        'output': ""
+    }
+
     try:
 
         retVal = {'error': 'none'}
@@ -83,11 +88,13 @@ def populate_database():
             retVal['error'] = "logged in user must be admin"
             return json.dumps(retVal)
 
+        cmd = request.form.get('cmd')
 
         # if request.method == 'POST':
-        print("population has started...")
 
-        cmd = request.form.get('cmd')
+        print(f"population has started: {cmd}" )
+
+
 
         if cmd == 'clear_db':
             db.clear_db(g.user)
@@ -108,17 +115,21 @@ def populate_database():
         elif cmd == 'generate_portfolios':
             db.generate_portfolios()
 
+        else:
+            message = f"{cmd} is not a valid command"
+
+            out['success'] = False
+            out['output'] = message
+
+            print(message)
+
         # ####
          # capture output
-        out = {
-            'success': True,
-            'output': ""
-        }
+
 
         if capture_sdout:
-            out['output'] = sys.stdout.getvalue()  # release output
-            # out = old_sdout.getvalue()  # release output
-            # ####
+            if out['success']:
+                out['output'] = sys.stdout.getvalue()  # release output
 
             sys.stdout.close()  # close the stream
             sys.stdout = old_sdout  # restore original stdout
@@ -128,10 +139,7 @@ def populate_database():
         return json.dumps(out)  # post processing
 
     except Exception as e:
-        out = {
-            'success': False,
-            'output': ""
-        }
+
 
         if capture_sdout:
             out['output'] = sys.stdout.getvalue() + "\n<hr/>ERROR:" + str(e) # release output

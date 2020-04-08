@@ -17,6 +17,8 @@ from db.tables import *
 from db import stock_handler as sth
 import json
 
+print_log = ""
+
 def init_app(app):
     with app.app_context():
         dba.init_app(app)
@@ -127,10 +129,13 @@ def clean_stocks():
         if len(history.index) <= 0:
             click.echo(rSymbol + " not found. Removing... ")
             to_remove.append(rId)
+        else:
+            click.echo("Found" + rSymbol + "... ")
 
     for id in to_remove:
         dba.engine.execute(f"DELETE FROM STOCK WHERE ID = {id}")
         dba.session.commit()
+        click.echo("All unfound stocks removed!")
 
 
 @click.command('populate-stock-data')
@@ -167,7 +172,45 @@ def populate_stock_history():
             create_stock_history(new_history_dict)
 
 
+@click.command('populate-and-clean-stock-data')
+@with_appcontext
+def click_populate_and_clean_stock_history():
+    populate_stock_history()
 
+def populate_and_clean_stock_history():
+    to_remove = []
+
+    for stock in dba.engine.execute("SELECT * FROM STOCK").fetchall():
+        rId = stock[0]
+        rSymbol = stock[1]
+        rName = stock[2]
+
+        history = sth.fetch_stock_data(rSymbol)
+
+        # if history.
+
+        if len(history.index) <= 0:
+            click.echo(rSymbol + " not found. Skipping... ")
+            to_remove.append(rId)
+            continue
+
+        click.echo("generating for " + rSymbol + "... ")
+        for i in history.index:
+            new_history_dict = {
+                "stock_id": rId,
+                "date": sth.timestamp_to_date(str(i)),
+                "high": history['High'][i],
+                "low": history['Low'][i],
+                "open": history['Open'][i],
+                "close": history['Close'][i]
+            }
+
+            create_stock_history(new_history_dict)
+
+    for id in to_remove:
+        dba.engine.execute(f"DELETE FROM STOCK WHERE ID = {id}")
+        dba.session.commit()
+        click.echo("All unfound stocks removed!")
     # dba.session.commit()
 
 @click.command('generate-portfolios')
@@ -438,3 +481,9 @@ def _process_mockaroo_query(dataUrl, processing_function, entry_type="entries"):
 
     # display erroneous responses
     click.echo(response.json())
+
+# def _lprint(message):
+#     global print_log
+#     click.echo(message)
+#     print(message)
+#     print_log += message + "\n"

@@ -25,3 +25,4 @@ venv.bak/
 .idea/
 .vs/
 capstone-project.sqlite-journal
+deploy.bat
