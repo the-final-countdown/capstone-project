@@ -32,7 +32,8 @@ def init_app(app):
         app.cli.add_command(click_generate_portfolios)
 
 
-        if Internal_Startup.query.filter(Internal_Startup.id==0).first() is None:
+        initial_startup_check: Internal_Startup = Internal_Startup.query.filter(Internal_Startup.id==0).first()
+        if initial_startup_check is None or not initial_startup_check.complete:
             first_run()
 
         # populate_users()
