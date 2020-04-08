@@ -109,6 +109,9 @@ def populate_database():
         elif cmd == 'clean_stocks':
             db.clean_stocks()
 
+        elif cmd == 'populate_and_clean_stock_history':
+            db.populate_and_clean_stock_history()
+
         elif cmd == 'populate_stock_history':
             db.populate_stock_history()
 

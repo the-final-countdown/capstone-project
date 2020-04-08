@@ -43,8 +43,9 @@ function populate_db_cmd(cmd) {
 function populate_db_full() {
     populate_db_cmd("clear_db")
         .then(() => populate_db_cmd("populate_users"))
-        .then(() => populate_db_cmd("populate_stocks"))
-        .then(() => populate_db_cmd("clean_stocks"))
+        .then(() => populate_db_cmd("populate_and_clean_stock_history"))
+        // .then(() => populate_db_cmd("populate_stocks"))
+        // .then(() => populate_db_cmd("clean_stocks"))
         .then(() => populate_db_cmd("populate_stock_history"))
         .then(() => populate_db_cmd("generate_portfolios"))
 
