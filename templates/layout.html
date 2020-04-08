@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!--Add custom CSS-->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!--Google fonts CSS-->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -20,7 +21,7 @@
 <body>
     {% include 'components/header.html' %}
     <div class="container">
-
+        <div class="content-section">
         {% block content %}{% endblock %}
     
         {% for message in get_flashed_messages() %}
@@ -28,6 +29,7 @@
         {% endfor %}
     
         {% block scripts %}{% endblock %}
+        </div>
     </div>
     {% include 'components/footer.html' %}
 

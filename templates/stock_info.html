@@ -3,10 +3,10 @@
 {% block title %}Stock Info{% endblock %}
 
 {% block content %}
-<table class="table">
-    <h2>{{ values.stock.stock_symbol }} - {{ values.stock.company_name }}</h2>
+<table class="table table-striped">
+    <h2 class="section-title">{{ values.stock.stock_symbol }} - {{ values.stock.company_name }}</h2>
 
-    <thead>
+    <thead class="thead-dark">
       <tr>
         <th scope="col">Date</th>
         <th scope="col">Open</th>
