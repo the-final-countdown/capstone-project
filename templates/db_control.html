@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block title %}Database Control{% endblock %}
+
+{% block content %}
+
+    <h2>Database Controls:</h2>
+
+    <button onclick="populate_db('clear_db')">Clear DB </button>
+    <button onclick="populate_db('populate_users')">Populate Users</button>
+    <button onclick="populate_db('populate_stocks')">Populate Stocks</button>
+    <button onclick="populate_db('clean_stocks')">Clean Stocks</button>
+    <button onclick="populate_db('populate_stock_history')">Populate Stock History</button>
+    <button onclick="populate_db('generate_portfolios')">Generate Portfolios</button>
+
+
+    <input type="checkbox" id="capture_sdout" name="capture_sdout">
+    <label for="capture_sdout">Capture SdOut</label>
+
+    <p id="task-status"></p>
+
+{#    <script src="{{ url_for('static', filename='admin-db-control.js') }}"></script>#}
+    <script src="{{ url_for('admin.get_populate_database_js') }}"></script>
+
+
+{% endblock %}

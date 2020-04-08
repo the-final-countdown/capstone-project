@@ -23,15 +23,52 @@ def init_app(app):
         dba.create_all()
 
         # Adding click commands:
-        app.cli.add_command(populate_users)
-        app.cli.add_command(populate_stocks)
-        app.cli.add_command(clean_stocks)
-        app.cli.add_command(populate_stock_history)
-        app.cli.add_command(generate_portfolios)
+        app.cli.add_command(click_populate_users)
+        app.cli.add_command(click_populate_stocks)
+        app.cli.add_command(click_clean_stocks)
+        app.cli.add_command(click_populate_stock_history)
+        app.cli.add_command(click_generate_portfolios)
 
+        # populate_users()
+
+
+def clear_db(current_user: User = None):
+    Transaction.query.delete()
+    Portfolio.query.delete()
+    Stock.query.delete()
+    Stock_History.query.delete()
+
+    if not current_user is None:
+        User.query.filter(User.id!=current_user.id).delete()
+    else:
+        User.query.delete()
+
+    dba.session.commit()
+
+    print("DB Cleared")
+
+
+
+
+@click.command('populate-db')
+@with_appcontext
+def click_populate_db():
+    populate_db()
+
+
+def populate_db():
+    populate_users()
+    # populate_stocks()
+    # clean_stocks()
+    # populate_stock_history()
+    # generate_portfolios()
+    print("populated")
 
 @click.command('populate-users')
 @with_appcontext
+def click_populate_users():
+    populate_users()
+
 def populate_users():
     _process_mockaroo_query("https://my.api.mockaroo.com/users.json", create_user, "users")
 
@@ -63,12 +100,18 @@ def populate_users():
 
 @click.command('populate-stocks')
 @with_appcontext
+def click_populate_stocks():
+    populate_stocks()
+
 def populate_stocks():
     _process_mockaroo_query("https://my.api.mockaroo.com/stock_symbols.json", create_stock, "stocks")
 
 
 @click.command('clean-stock-data')
 @with_appcontext
+def click_clean_stocks():
+    clean_stocks()
+
 def clean_stocks():
     to_remove = []
 
@@ -92,6 +135,9 @@ def clean_stocks():
 
 @click.command('populate-stock-data')
 @with_appcontext
+def click_populate_stock_history():
+    populate_stock_history()
+
 def populate_stock_history():
     for stock in dba.engine.execute("SELECT * FROM STOCK").fetchall():
         rId = stock[0]
@@ -126,6 +172,9 @@ def populate_stock_history():
 
 @click.command('generate-portfolios')
 @with_appcontext
+def click_generate_portfolios():
+    generate_portfolios()
+
 def generate_portfolios():
     for user in dba.engine.execute("SELECT * FROM USER").fetchall():
         # click.echo(user)
@@ -190,6 +239,11 @@ def create_user(user):
     elif 'last-name' not in user:
         return 'Last name required'
 
+    make_admin = False
+
+    if len(User.query.all()) <= 0:
+        make_admin = True
+
     new_user = User(
         email=user['email'],
         password=generate_password_hash(user['password']),
@@ -201,7 +255,8 @@ def create_user(user):
         city=user.get('city', None),
         state=user.get('state', None),
         zip_code=user.get('zip-code', None),
-        telephone=user.get('telephone', None)
+        telephone=user.get('telephone', None),
+        is_admin=make_admin
     )
 
     dba.session.add(new_user)
@@ -266,6 +321,9 @@ def create_stock(stock):
 
     if 'stock_symbol' not in stock:
         return 'Stock symbol required'
+
+    if len(Stock.query.filter(Stock.stock_symbol==stock['stock_symbol']).all()) > 0:
+        return 'Stock already in db. Skipping...'
 
     stock_name = ""
     if 'stock_name' not in stock:
@@ -369,7 +427,7 @@ def _process_mockaroo_query(dataUrl, processing_function, entry_type="entries"):
 
         for user in json_users:
             error = processing_function(user)
-            if error is not None:
+            if isinstance(error, str):
                 errors += 1
 
         users_added = len(json_users) - errors
