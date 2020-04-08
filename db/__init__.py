@@ -54,7 +54,8 @@ def first_run():
        'password': "IAmTheAdmin!!1",
     })
 
-    populate_db()
+    # populate_db()
+
 
     Internal_Startup.query.filter(Internal_Startup.id == 0).first().complete=True
 
