@@ -86,8 +86,8 @@ def click_clear_db():
 def clear_db(current_user: User = None):
     Transaction.query.delete()
     Portfolio.query.delete()
-    Stock.query.delete()
     Stock_History.query.delete()
+    Stock.query.delete()
     Internal_Startup.query.delete()
 
     if not current_user is None:
@@ -168,7 +168,8 @@ def click_clean_stocks():
 def clean_stocks():
     to_remove = []
 
-    stockList = dba.engine.execute("SELECT * FROM STOCK").fetchall()
+    stockList = Stock.query.all()
+    # stockList = dba.engine.execute("SELECT * FROM STOCK").fetchall()
     stockTotal = len(stockList)
     stockIter = 0
 
@@ -176,9 +177,9 @@ def clean_stocks():
         stockIter += 1
         click.echo(f"Stock {stockIter} of {stockTotal}: ")
 
-        rId = stock[0]
-        rSymbol = stock[1]
-        rName = stock[2]
+        rId = stock.id
+        rSymbol = stock.stock_symbol
+        rName = stock.company_name
 
         history = sth.fetch_stock_data(rSymbol)
 
@@ -190,8 +191,9 @@ def clean_stocks():
         else:
             click.echo("Found " + rSymbol + "... ")
 
-    for id in to_remove:
-        dba.engine.execute(f"DELETE FROM STOCK WHERE ID = {id}")
+    for del_id in to_remove:
+        # dba.engine.execute(f"DELETE FROM STOCK WHERE ID = {id}")
+        Stock.query.filter(Stock.id==del_id).delete()
         dba.session.commit()
     click.echo("All unfound stocks removed!")
 
@@ -202,7 +204,8 @@ def click_populate_stock_history():
     populate_stock_history()
 
 def populate_stock_history():
-    stockList = dba.engine.execute("SELECT * FROM STOCK").fetchall()
+    stockList = Stock.query.all()
+    # stockList = dba.engine.execute("SELECT * FROM STOCK").fetchall()
     stockTotal = len(stockList)
     stockIter = 0
 
@@ -210,9 +213,9 @@ def populate_stock_history():
         stockIter += 1
         click.echo(f"Stock {stockIter} of {stockTotal}: ")
 
-        rId = stock[0]
-        rSymbol = stock[1]
-        rName = stock[2]
+        rId = stock.id
+        rSymbol = stock.stock_symbol
+        rName = stock.company_name
 
         history = sth.fetch_stock_data(rSymbol)
 
@@ -245,7 +248,8 @@ def click_populate_and_clean_stock_history():
 def populate_and_clean_stock_history():
     to_remove = []
 
-    stockList = dba.engine.execute("SELECT * FROM STOCK").fetchall()
+    stockList = Stock.query.all()
+    # stockList = dba.engine.execute("SELECT * FROM STOCK").fetchall()
     stockTotal = len(stockList)
     stockIter = 0
 
@@ -253,9 +257,9 @@ def populate_and_clean_stock_history():
         stockIter += 1
         click.echo(f"Stock {stockIter} of {stockTotal}: ")
 
-        rId = stock[0]
-        rSymbol = stock[1]
-        rName = stock[2]
+        rId = stock.id
+        rSymbol = stock.stock_symbol
+        rName = stock.company_name
 
         history = sth.fetch_stock_data(rSymbol)
 
@@ -279,8 +283,9 @@ def populate_and_clean_stock_history():
 
             create_stock_history(new_history_dict)
 
-    for id in to_remove:
-        dba.engine.execute(f"DELETE FROM STOCK WHERE ID = {id}")
+    for del_id in to_remove:
+        Stock.query.filter(Stock.id==del_id).delete()
+        # dba.engine.execute(f"DELETE FROM STOCK WHERE ID = {id}")
         dba.session.commit()
     click.echo("All unfound stocks removed!")
     # dba.session.commit()
