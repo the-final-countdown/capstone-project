@@ -33,6 +33,7 @@ def init_app(app):
         app.cli.add_command(click_clean_stocks)
         app.cli.add_command(click_populate_stock_history)
         app.cli.add_command(click_generate_portfolios)
+        app.cli.add_command(click_generate_portfolios_for_user)
 
         # first_run()
 
@@ -325,6 +326,29 @@ def generate_portfolios():
 
             fill_portfolio(create_portfolio_params(user.id, display_name).id)
 
+@click.command('generate-portfolios-for-user')
+@click.option('--uid', help='ID for desired user')
+@with_appcontext
+def click_generate_portfolios_for_user(uid: int):
+    generate_portfolios_for_user(uid)
+
+
+def generate_portfolios_for_user(uid: int):
+    user = User.query.filter(User.id==uid).first()
+    if user is None:
+        click.echo(f"User {uid} not found...")
+        return
+
+    click.echo(user)
+
+    num_of_portfolios = random.choice([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3])
+
+    for i in range(1, num_of_portfolios + 1):
+        display_name = f"{user.first_name} {user.last_name} Portfolio {i}"
+
+        click.echo(f"generating {display_name}...")
+
+        fill_portfolio(create_portfolio_params(user.id, display_name).id)
 
 
 def fill_portfolio(portfolio_id: int):
