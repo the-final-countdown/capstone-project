@@ -6,6 +6,15 @@
 <table class="table table-striped">
     <h2 class="section-title">Portfolios - {{ values.user.first_name }} {{ values.user.last_name }}</h2>
 
+    <ul>
+        <li><strong>Email:</strong> {{ values.user.email }}</li>
+        <li><strong>Address:</strong> {{ values.user.address }}, {{ values.user.city }} {{ values.user.state }}, {{ values.user.zip }}</li>
+        <li><strong>Telephone:</strong> {{ values.user.telephone }}</li>
+        <li><strong>Account Created:</strong> {{ values.user.created_on }}</li>
+        <li><strong>Is Admin:</strong> {{ values.user.is_admin }}</li>
+
+    </ul>
+
     <thead class="thead-dark">
       <tr>
         <th scope="col">ID</th>
