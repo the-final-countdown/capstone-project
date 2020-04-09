@@ -291,13 +291,14 @@ def click_generate_portfolios():
     generate_portfolios()
 
 def generate_portfolios():
-    for user in dba.engine.execute("SELECT * FROM USER").fetchall():
-        # click.echo(user)
+    # for user in dba.engine.execute("SELECT * FROM USER").fetchall():
+    for user in User.query.all():
+        click.echo(user)
 
         num_of_portfolios = random.choice([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3])
 
         for i in range(1, num_of_portfolios + 1):
-            display_name = f"{user[3]} {user[4]} Portfolio {i}"
+            display_name = f"{user.first_name} {user.last_name} Portfolio {i}"
 
             click.echo(f"generating {display_name}...")
 
