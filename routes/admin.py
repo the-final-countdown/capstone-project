@@ -9,7 +9,7 @@ import datetime as dt
 import json
 
 import sys
-
+from flask_sqlalchemy import SQLAlchemy
 from io import StringIO
 
 import subprocess
@@ -31,8 +31,8 @@ def admin():
         return json.dumps(retVal)
 
 
-    user = db.get_all_users()
-    return render_template('admin.html', users=user)
+    users = db.get_all_users()
+    return render_template('admin.html', users=users)
 
     # if request.method == 'POST':
     #     user_id = request.form.get('user-id')
@@ -42,8 +42,9 @@ def admin():
     #     user = db.get_all_users()
     #     return render_template('admin.html', users=user)
 
-@bp.route('/admin/db_control', methods=['GET', 'POST'])
-def db_control_page():
+
+@bp.route('/admin/user_search', methods=['GET', 'POST'])
+def user_search():
     retVal = {'error': 'none'}
 
     if g.user is None:
@@ -55,105 +56,29 @@ def db_control_page():
         return json.dumps(retVal)
 
 
-    user = db.get_all_users()
-    return render_template('db_control.html')
+    user_id = request.form.get('uid')
+    first_name = request.form.get('first-name')
+    last_name = request.form.get('last-name')
+    email = request.form.get('email')
+
+    if user_id is None:
+        user_id = ""
+
+    if first_name is None:
+        first_name = ""
+
+    if last_name is None:
+        last_name = ""
+
+    if email is None:
+        email = ""
 
 
-@bp.route('/admin/db_control/command', methods=['GET', 'POST'])
-def populate_database():
-    # capture_sdout: bool = (request.form.get('capture_sdout') != 'FALSE')
-    capture_sdout: bool = (request.form.get('capture_sdout').upper() == 'TRUE')
-
-    old_sdout = sys.stdout
-
-    if capture_sdout:
-
-
-        sys.stdout = StringIO()
-
-    out = {
-        'success': True,
-        'output': ""
-    }
-
-    try:
-
-        retVal = {'error': 'none'}
-
-        if g.user is None:
-            retVal['error'] = "not logged in"
-            return json.dumps(retVal)
-
-        if not g.user.is_admin:
-            retVal['error'] = "logged in user must be admin"
-            return json.dumps(retVal)
-
-        cmd = request.form.get('cmd')
-
-        # if request.method == 'POST':
-
-        print(f"population has started: {cmd}" )
-
-
-
-        if cmd == 'clear_db':
-            db.clear_db(g.user)
-
-        elif cmd == 'populate_users':
-            db.populate_users()
-
-
-        elif cmd == 'populate_stocks':
-            db.populate_stocks()
-
-        elif cmd == 'clean_stocks':
-            db.clean_stocks()
-
-        elif cmd == 'populate_and_clean_stock_history':
-            db.populate_and_clean_stock_history()
-
-        elif cmd == 'populate_stock_history':
-            db.populate_stock_history()
-
-        elif cmd == 'generate_portfolios':
-            db.generate_portfolios()
-
-        else:
-            message = f"{cmd} is not a valid command"
-
-            out['success'] = False
-            out['output'] = message
-
-            print(message)
-
-        # ####
-         # capture output
-
-
-        if capture_sdout:
-            if out['success']:
-                out['output'] = sys.stdout.getvalue()  # release output
-
-            sys.stdout.close()  # close the stream
-            sys.stdout = old_sdout  # restore original stdout
-
-            print(out)
-
-        return json.dumps(out)  # post processing
-
-    except Exception as e:
-
-
-        if capture_sdout:
-            out['output'] = sys.stdout.getvalue() + "\n<hr/>ERROR:" + str(e) # release output
-            # ####
-
-            sys.stdout.close()  # close the stream
-            sys.stdout = old_sdout  # restore original stdout
-
-            print(out)
-
-        return json.dumps(out)  # post processing
+    users = db.User.query.filter(db.dba.and_(db.User.id.match(f"%{user_id}%"),
+                                             db.User.first_name.match(f"%{first_name}%"),
+                                             db.User.last_name.match(f"%{last_name}%"),
+                                             db.User.email.match(f"%{email}%")))
+    return render_template('user_search.html', users=users)
 
 
 

@@ -2,7 +2,28 @@
 
 {% block content %}
 
-    <h1 class="section-title">{% block title %}Admin{% endblock %} page</h1>
+    <h1 class="section-title">{% block title %}User Search{% endblock %} page</h1>
+
+        <form method="get" action="{{ url_for('admin.user_search') }}">
+        <div class="form-group">
+            <label for="uid">User ID</label>
+            <input type="text" name="uid" class="form-control" id="uid">
+        </div>
+        <div class="form-group">
+            <label for="first-name">First Name</label>
+            <input type="text" name="first-name" class="form-control" id="first-name">
+        </div>
+        <div class="form-group">
+            <label for="last-name">Last Name</label>
+            <input type="text" name="last-name" class="form-control" id="last-name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" class="form-control" id="email">
+        </div>
+        <button type="submit" class="btn btn-outline-success">Search</button>
+        <br><br>
+    </form>
 
     <table class="table table-striped">
         <thead class="thead-dark">
