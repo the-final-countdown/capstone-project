@@ -24,3 +24,6 @@ venv.bak/
 # IDEs
 .idea/
 .vs/
+capstone-project.sqlite-journal
+deploy.bat
+heroku ps exec set environment.txt

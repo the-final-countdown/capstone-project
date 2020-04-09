@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block title %}Portfolio Transactions{% endblock %}
+
+{% block content %}
+    <h2 class="section-title">{{ values.portfolio.display_name }} - {{ values.user.first_name }} {{ values.user.last_name }}</h2>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Stock ID</th>
+        <th scope="col">Number of Shares</th>
+        <th scope="col">Purchase Date</th>
+        <th scope="col">Purchase Price</th>
+        <th scope="col">Sold On</th>
+        <th scope="col">Sold Price</th>
+        <th scope="col">Transaction Finalized</th>
+      </tr>
+    </thead>
+    <tbody>        
+        {% for tr in values.transactions%}
+        <tr>
+            <th scope="row">
+                <a href="{{ url_for('db_access.show_stock', stock_lookup=tr.get_stock().stock_symbol) }}">
+                    {{tr.get_stock().company_name}} ({{ tr.get_stock().stock_symbol }})
+                </a>
+            </th>
+            <td>{{tr.number_shares}}</td>
+            <td>{{tr.purchase_date}}</td>
+            <td>{{tr.purchase_price}}</td>
+            <td>{{tr.sell_on}}</td>
+            <td>{{tr.sell_price}}</td>
+            <td>{{tr.transaction_finalized}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  
+  <!---
+  {% for transaction in transactions %}
+   <p>transaction.id</p>
+   <p>transaction.fk_portfolio</p>
+   <p>transaction.fk_stock_id</p>
+   <p>transaction.number_shares</p>
+   <p>transaction.purchase_date</p>
+   <p>transaction.purchase_price</p>
+   <p>transaction.sell_on</p>
+   <p>transaction.sell_price</p>
+   <p>transaction.transaction_finalized</p>
+  {% endfor %}
+-->
+{% endblock %}

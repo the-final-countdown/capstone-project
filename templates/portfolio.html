@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block title %}Portfolio{% endblock %}
+
+{% block content %}
+<table class="table table-striped">
+    <h2 class="section-title">Portfolios - {{ values.user.first_name }} {{ values.user.last_name }}</h2>
+
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Display Name</th>
+        <th scope="col">Created On</th>
+        <th scope="col">UserID</th>
+        <th scope="col">Transaction</th>
+      </tr>
+    </thead>
+    <tbody>        
+        {% for item in values.portfolios%}
+        <tr>
+            <th scope="row">{{item.id}}</th>
+            <td>{{item.display_name}}</td>
+            <td>{{item.created_on}}</td>
+            <td>{{item.user_id}}</td>
+            <td>
+                <a href="{{ url_for('db_access.portfolio_transactions', user_id=item.user_id, portfolio_id=item.id) }}">View Transaction Record</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  
+
+{% endblock %}

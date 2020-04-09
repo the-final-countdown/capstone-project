@@ -8,8 +8,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link" href="{{ url_for('index') }}">Capstone Project</a>
+                    <a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
+                    {% if g.user %}
+                    <a class="nav-item nav-link" href="{{ url_for('db_access.user_portfolios') }}">My Portfolios</a>
                     <a class="nav-item nav-link" href="{{ url_for('admin.admin') }}">Admin</a>
+                    {% endif %}
                 </div>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">

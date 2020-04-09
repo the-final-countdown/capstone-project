@@ -5,23 +5,23 @@ from werkzeug.security import check_password_hash
 
 import db
 
+import json
+
 bp = Blueprint('auth', __name__)
 
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        error = db.create_user({
+        db.create_user({
             'first-name': request.form.get('first-name'),
             'last-name': request.form.get('last-name'),
             'email': request.form.get('email'),
             'password': request.form.get('password'),
         })
-
-        if error is None:
-            return redirect(url_for('auth.login'))
-        else:
-            flash(error)
+        return redirect(url_for('auth.login'))
+    # else:
+    #     return render_template('auth/register.html')
 
     return render_template('auth/register.html')
 
@@ -70,6 +70,7 @@ def load_logged_in_user():
         g.user = db.get_user_by_id(user_id)
 
 
+
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
@@ -79,3 +80,6 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+

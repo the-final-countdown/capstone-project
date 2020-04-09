@@ -1,14 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>{% block title %}Admin{% endblock %} page</h1>
+    <a href="{{ url_for('admin.db_control_page') }}">Go To Database Control Panel</a>
 
-    <table class="table">
+    <h1 class="section-title">{% block title %}Admin{% endblock %} page</h1>
+
+    <table class="table table-striped">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
                 <th scope="col">Email Address</th>
+                <th scope="col">Portfolio</th>
             </tr>
         </thead>
         <tbody>
@@ -17,11 +20,46 @@
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
                 <td>{{ user.email }}</td>
+                <td>
+{#                    <form action="" method="post">#}
+{#                        <input type="hidden" value="{{ user.id }}" name="user-id">#}
+{#                        <button type="submit">Portfolio</button>#}
+{#                    </form>#}
+                    <a href="{{ url_for('db_access.specific_user_portfolios', user_id=user.id) }}">View Portfolios</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-  
+    
+
+<!--
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Email Address</th>
+                <th scope="col">Stocks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <form action="" method="post">
+                        <input type="hidden" name="id" value="{{ user.id }}">
+                        <button type="submit">Stocks</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+-->
 {% endblock %}
 
   
