@@ -323,7 +323,7 @@ def generate_portfolios():
 
             click.echo(f"generating {display_name}...")
 
-            fill_portfolio(create_portfolio_params(user[0], display_name).id)
+            fill_portfolio(create_portfolio_params(user.id, display_name).id)
 
 
 
