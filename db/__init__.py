@@ -191,10 +191,17 @@ def clean_stocks():
         else:
             click.echo("Found " + rSymbol + "... ")
 
+    delTotal = len(to_remove)
+    delIter = 0
+
+    click.echo(f"Deleting {delTotal} unfound stocks...")
     for del_id in to_remove:
+        delIter += 1
+        click.echo(f"Deleting id={del_id} ({delIter} of {delTotal})")
+
         # dba.engine.execute(f"DELETE FROM STOCK WHERE ID = {id}")
         Stock.query.filter(Stock.id==del_id).delete()
-        dba.session.commit()
+    dba.session.commit()
     click.echo("All unfound stocks removed!")
 
 
@@ -283,10 +290,19 @@ def populate_and_clean_stock_history():
 
             create_stock_history(new_history_dict)
 
+
+
+    delTotal = len(to_remove)
+    delIter = 0
+
+    click.echo(f"Deleting {delTotal} unfound stocks...")
     for del_id in to_remove:
+        delIter += 1
+        click.echo(f"Deleting id={del_id} ({delIter} of {delTotal})")
+
         Stock.query.filter(Stock.id==del_id).delete()
         # dba.engine.execute(f"DELETE FROM STOCK WHERE ID = {id}")
-        dba.session.commit()
+    dba.session.commit()
     click.echo("All unfound stocks removed!")
     # dba.session.commit()
 
